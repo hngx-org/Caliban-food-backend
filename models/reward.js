@@ -10,13 +10,14 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         quantity: {
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
         reedeemed: {
             type: DataTypes.BOOLEAN
         },
         note: {
-            type: DataTypes.STRING
+            type: DataTypes.TEXT
         }
     
     })
