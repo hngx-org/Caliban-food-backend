@@ -1,0 +1,32 @@
+{
+  "name": "caliban-food-backend",
+  "version": "1.0.0",
+  "description": "Team-caliban backend for lunch-food app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hngx-org/Caliban-food-backend.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hngx-org/Caliban-food-backend/issues"
+  },
+  "homepage": "https://github.com/hngx-org/Caliban-food-backend#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jest": "^29.7.0",
+    "mysql2": "^3.6.1",
+    "nodemon": "^3.0.1",
+    "sequelize": "^6.33.0",
+    "supertest": "^6.3.3"
+  }
+}
