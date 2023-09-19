@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        reedeemed: {
+        redeemed: {
             type: DataTypes.BOOLEAN
         },
         note: {
