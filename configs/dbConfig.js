@@ -2,14 +2,13 @@ const Sequelize = require('sequelize')
   
 // Creating new Object of Sequelize
 const sequelize = new Sequelize(
-    'DATABASE_NAME',
-    'DATABASE_USER_NAME',
-    'DATABASE_PASSWORD', {
+    'reward-db',
+    'root',
+    'toor', {
   
-        // Explicitly specifying 
-        // mysql database
+        
         dialect: 'mysql',
-  
+
         // So by default, host is 'localhost'           
         host: 'localhost'
     }
