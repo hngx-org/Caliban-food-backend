@@ -1,6 +1,8 @@
 const express = require("express");
 
 
+const withdrawRouter = require('./withdraw.routes');
+
 
 //Define the routes here.
 module.exports = function routes(app) {
@@ -11,6 +13,7 @@ module.exports = function routes(app) {
     //   app.use("/api/auth", authRouter);
 
     // Any other routes
+    app.use("/api/withdraw", withdrawRouter);
    
 
 }
