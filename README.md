@@ -1,45 +1,83 @@
 # Folder Structure
 
 CALIBAN-FOOD-BACKEND /
+
 ├── configs/  # Configuration files (database, environment, etc.)
+
 │       ├── dbConfig.js  # Database configuration
+
 ├── controllers/
+
 │   ├── userController.js  # User-related logic
+
 │   ├── lunchController.js  # Lunch-related logic
+
 │   └── ...
+
 ├── models/
+
 │   ├── User.js            # User model
+
 │   ├── Lunch.js           # Lunch model
+
 │   └── ...
+
 ├── routes/
+
 │   ├── api.js             # API routes (versioning, grouping)
+
 │   ├── userRoutes.js       # User-related routes
+
 │   ├── lunchRoutes.js      # Lunch-related routes
+
 │   └── ...
+
 ├── services/               # Service files as needd by team implementation
-│   ├── AuthService.js     
-│   ├── LunchService.js    
+
+│   ├── AuthService.js (If any)
+
+│   ├── LunchService.js  (If any)  
+
 │   └── ...etc
+
 ├── middleware/             # Middleware files as needed by team implementation.
-│   ├── authMiddleware.js   
+
+│   ├── authMiddleware.js  
+
 │   ├── errorMiddleware.js  
+
 │   └── ...etc
+
 ├── tests/
+
 │   ├── user.test.js        # Unit tests for User-related logic
+
 │   ├── lunch.test.js       # Unit tests for Lunch-related logic
+
 │   └── ...etc
+
 ├── utils/
+
 │   ├── helpers.js          # Helper functions
+
 │   └── ...etc
-|-- validations             
-    |-- # Input validation functions
+
+|-- validations     
+
+ |-- #Input validation functions
 
 ├── app.js                  # Main application entry point
+
 ├── server.js               # Server initialization
+
 ├── package.json            # Project dependencies and scripts
+
 ├── README.md               # Project documentation
+
 ├── .env                    # Environment variables (not in version control)
+
 ├── .gitignore              # Git ignore file
+
 └── ...
 
 **-- P.S: Any other file to be added here, should really be important and discussed with the maintainers of the repo/project.**
