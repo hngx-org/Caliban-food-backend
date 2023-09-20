@@ -14,9 +14,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         redeemed: {
-            type: DataTypes.BOOLEAN
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+
         },
-        C: {
+        note: {
             type: DataTypes.TEXT
         }
 
