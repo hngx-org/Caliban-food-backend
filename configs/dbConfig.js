@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
   
 // Creating new Object of Sequelize
 const sequelize = new Sequelize(
-    'reward-db',
+    'lunch-db',
     'root',
     'toor', {
   
@@ -13,7 +13,8 @@ const sequelize = new Sequelize(
         // So by default, host is 'localhost'           
         host: 'localhost',
         logging: console.warn // Enable logging
-    }
+    },
+    
 );
 
 sequelize.authenticate()

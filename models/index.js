@@ -15,7 +15,7 @@ sequelize.authenticate()
 const db = {}
 db.sequelize = sequelize
 db.models = {}
-db.models.reward = require('./reward')(sequelize, DataTypes)
+db.models.lunch = require('./Lunch')(sequelize, DataTypes)
 
 //sync the db to the local database
 db.sequelize.sync({ force: false })

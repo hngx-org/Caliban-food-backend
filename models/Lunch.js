@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const Reward = sequelize.define("reward", {
+    const Lunch = sequelize.define("lunch", {
         senderId: {
             type: DataTypes.STRING,
             allowNull: false
@@ -21,9 +21,18 @@ module.exports = (sequelize, DataTypes) => {
         note: {
             type: DataTypes.TEXT
         }
+    },{
+        freezeTableName: true
+      }
+    );
 
-    })
+    Lunch.associate = models => {
+        Lunch.belongsTo(models.Organization, {
+            foreignKey: "org_id",
+            as:"organization"
+        })
+    }
 
-    return Reward
+    return Lunch;
 
 }
