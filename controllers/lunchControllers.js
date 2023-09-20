@@ -17,7 +17,7 @@ const addLunch = async (req, res) => {
     if (parseInt(quantity) > 4) {
       return res.status(400).json({
         message: "Quantity is higher",
-        statusCode: 400,z
+        statusCode: 400,
       });
     }
 
