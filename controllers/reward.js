@@ -118,27 +118,9 @@ const getOneReward = async (req, res) => {
   }
 };
 
-/**
- *  @description  redeem reward
- *  @route        GET /api/lunch/redeem/:id
- *  @access       Public
- *
- */
-
-// 4. redeem reward
-// to change the boolen from true to false after the reward has been redeem
-
-const updateReward = async (req, res) => {
-  let id = req.params.id;
-
-  const reward = await Reward.update(req.body, { where: { id: id } });
-
-  res.status(200).send(reward);
-};
 
 module.exports = {
   addReward,
   getAllReward,
   getOneReward,
-  updateReward,
 };

@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Withdrawals extends Model {
+  class Organization_lunch_wallet extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,26 +11,26 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Withdrawals.belongsTo(models.User, { foreignKey: "user_id", as: "user" });
+       Organization_lunch_wallet.belongsTo(models.Organization, {
+         foreignKey: "org_id",
+       });
     }
   }
-  Withdrawals.init(
+  Organization_lunch_wallet.init(
     {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      user_id: DataTypes.INTEGER,
-      status: DataTypes.ENUM("pending", "approved", "rejected"),
-      amount: DataTypes.DECIMAL(10, 2),
-      created_at: DataTypes.DATE,
+      balance: DataTypes.DECIMAL(10, 2),
+      org_id: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: "Withdrawals",
-      tableName: "withdrawals",
+      modelName: "OrganizationLaunchWallet",
+      tableName: "organization_launch_wallet",
     }
   );
-  return Withdrawals;
+  return Organization_lunch_wallet;
 };
