@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize')
-  
+const Sequelize = require("sequelize");
+
 // Creating new Object of Sequelize
 const sequelize = new Sequelize(
     'lunch-db',
@@ -17,12 +17,13 @@ const sequelize = new Sequelize(
     
 );
 
-sequelize.authenticate()
-.then(() => {
-    console.log("Connection established")
-})
-.catch((err) => {
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Connection established");
+  })
+  .catch((err) => {
     console.log("error during connecting");
-})
-  
-module.exports = sequelize
+  });
+
+module.exports = sequelize;
