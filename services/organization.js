@@ -5,10 +5,9 @@ const createOrganization = async (organizationData) => {
   try {
     const { organization_name, lunch_price } = organizationData;
 
-    // Default lunch_price to 1000 if not provided
     const newOrganization = await Organization.create({
       name: organization_name,
-      lunch_price: lunch_price || 1000,
+      lunch_price: lunch_price || 1000, // set defaults to #1000 if empty
     });
 
     return newOrganization;
