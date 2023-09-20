@@ -7,7 +7,7 @@ const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
-const v1Router = require("./routes/v1/index");
+const v1Router = require("./routes/api/index");
 
 
 const errorHandler = require("./utils/errrorHandler");
