@@ -1,11 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
 
     const Reward = sequelize.define("reward", {
-        senderid: {
+        senderId: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        receiverid: {
+        receiverId: {
             type: DataTypes.STRING,
             allowNull: false
         },
