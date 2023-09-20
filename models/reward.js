@@ -16,10 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         reedeemed: {
             type: DataTypes.BOOLEAN
         },
-        note: {
+        C: {
             type: DataTypes.TEXT
         }
-    
+
     })
 
     return Reward
