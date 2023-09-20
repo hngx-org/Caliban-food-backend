@@ -3,6 +3,13 @@ const db = require("../models/index");
 // create main Model
 const Reward = db.models.reward;
 
+/**
+ *  @description  Create reward
+ *  @route        POST /api/lunch/send
+ *  @access       Public
+ *
+ */
+
 // 1. create reward
 
 const addReward = async (req, res) => {
@@ -42,6 +49,13 @@ const addReward = async (req, res) => {
   }
 };
 
+/**
+ *  @description  Get all rewards
+ *  @route        GET /api/lunch/all/
+ *  @access       Public
+ *
+ */
+
 // 2. get all rewards
 
 const getAllReward = async (req, res) => {
@@ -68,6 +82,13 @@ const getAllReward = async (req, res) => {
     });
   }
 };
+
+/**
+ *  @description  Get a single reward
+ *  @route        GET /api/lunch/:id
+ *  @access       Public
+ *
+ */
 
 // 3. get single reward
 
@@ -97,41 +118,22 @@ const getOneReward = async (req, res) => {
   }
 };
 
+/**
+ *  @description  redeem reward
+ *  @route        GET /api/lunch/redeem/:id
+ *  @access       Public
+ *
+ */
+
 // 4. redeem reward
 // to change the boolen from true to false after the reward has been redeem
 
 const updateReward = async (req, res) => {
-  try {
-    const id = req.params.id;
-    let reward = await Reward.findOne({ where: { id: id } });
-    if (!reward) {
-      return res.status(404).json({
-        message: "No Reward Found",
-        statusCode: 404,
-        data: null,
-      });
-    }
-    if (reward.redeemed === true) {
-      return res.status(400).json({
-        message: "Reward already Redeemed",
-        statusCode: 400,
-        data: null,
-      });
-    }
-    // this place should change to true once we hit the route
-    // const reward = await Reward.update(req.body, { where: { id: id } });
-    return res.status(200).json({
-      message: "Reward redeemed successfully",
-      statusCode: 200,
-      data: null,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: `Error redeeming Reward: ${error?.message}`,
-      statusCode: 500,
-      data: null,
-    });
-  }
+  let id = req.params.id;
+
+  const reward = await Reward.update(req.body, { where: { id: id } });
+
+  res.status(200).send(reward);
 };
 
 module.exports = {
