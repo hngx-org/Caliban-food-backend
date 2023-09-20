@@ -1,10 +1,7 @@
-const db = require('../models')
-const path = require('path')
-
-
+const db = require('../models/index')
 
 // create main Model
-const Reward = db.products
+const Reward = db.models.reward
 
 
 
@@ -13,16 +10,16 @@ const Reward = db.products
 const addReward = async (req, res) => {
 
     let info = {
-        senderid: req.body.senderid,
-        receiverid: req.body.receiverid,
+        senderId: req.body.senderId,
+        receiverId: req.body.receiverId,
         quantity: req.body.quantity,
-        reedeemed: req.body.reedeemed,
+        redeemed: req.body.redeemed,
         note: req.body.note
     }
 
-    const product = await Product.create(info)
-    res.status(200).send(product)
-    console.log(product)
+    const reward = await Reward.create(info)
+    res.status(200).send(reward)
+    console.log(reward)
 
 }
 
@@ -30,112 +27,41 @@ const addReward = async (req, res) => {
 
 // 2. get all rewards
 
-const getAllProducts = async (req, res) => {
+const getAllReward = async (req, res) => {
 
-    let products = await Product.findAll({})
-    res.status(200).send(products)
+    let reward = await Reward.findAll({})
+    res.status(200).send(reward)
 
 }
 
 // 3. get single reward
 
-const getOneProduct = async (req, res) => {
+const getOneReward = async (req, res) => {
 
     let id = req.params.id
-    let product = await Product.findOne({ where: { id: id } })
-    res.status(200).send(product)
+    let reward = await Reward.findOne({ where: { id: id } })
+    res.status(200).send(reward)
 
 }
 
 // 4. redeem reward
+// to change the boolen from true to false after the reward has been redeem
 
-const updateProduct = async (req, res) => {
-
-    let id = req.params.id
-
-    const product = await Product.update(req.body, { where: { id: id } })
-
-    res.status(200).send(product)
-
-
-}
-
-// 5. delete product by id
-
-const deleteProduct = async (req, res) => {
+const updateReward = async (req, res) => {
 
     let id = req.params.id
 
-    await Product.destroy({ where: { id: id } })
+    const reward = await Reward.update(req.body, { where: { id: id } })
 
-    res.status(200).send('Product is deleted !')
+    res.status(200).send(reward)
+
 
 }
-
-// 6. get published product
-
-const getPublishedProduct = async (req, res) => {
-
-    const products = await Product.findAll({ where: { published: true } })
-
-    res.status(200).send(products)
-
-}
-
-// 7. connect one to many relation Product and Reviews
-
-const getProductReviews = async (req, res) => {
-
-    const id = req.params.id
-
-    const data = await Product.findOne({
-        include: [{
-            model: Review,
-            as: 'review'
-        }],
-        where: { id: id }
-    })
-
-    res.status(200).send(data)
-
-}
-
-
-// 8. Upload Image Controller
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'Images')
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname))
-    }
-})
-
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: '1000000' },
-    fileFilter: (req, file, cb) => {
-        const fileTypes = /jpeg|jpg|png|gif/
-        const mimeType = fileTypes.test(file.mimetype)
-        const extname = fileTypes.test(path.extname(file.originalname))
-
-        if (mimeType && extname) {
-            return cb(null, true)
-        }
-        cb('Give proper files formate to upload')
-    }
-}).single('image')
 
 
 module.exports = {
-    addProduct,
-    getAllProducts,
-    getOneProduct,
-    updateProduct,
-    deleteProduct,
-    getPublishedProduct,
-    getProductReviews,
-    upload
-
+    addReward,
+    getAllReward,
+    getOneReward,
+    updateReward
 }
