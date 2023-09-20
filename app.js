@@ -52,10 +52,10 @@ app.use(function (req, res, next) {
 app.use(errorHandler);
 
 // error handler
-app.use(function (err, req, res, next) {
-  // Handle errors as JSON responses
-  res.status(err.status || 500).json({ error: err.message });
-});
+// app.use(function (err, req, res, next) {
+//   // Handle errors as JSON responses
+//   res.status(err.status || 500).json({ error: err.message });
+// });
 
 // Establish the database connection
 dbConnection()
