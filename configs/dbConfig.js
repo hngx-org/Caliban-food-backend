@@ -13,8 +13,7 @@ const sequelize = new Sequelize(
         // So by default, host is 'localhost'           
         host: 'localhost',
         logging: console.warn // Enable logging
-    },
-    
+    }
 );
 
 sequelize
