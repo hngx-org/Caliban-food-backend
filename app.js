@@ -9,14 +9,9 @@ const cors = require("cors");
 
 const v1Router = require("./routes/api/index");
 
-
 const errorHandler = require("./utils/errrorHandler");
 const { loggerMiddleware } = require("./utils/logger");
 const { dbConnection } = require("./utils/database/dbConnection");
-
-
-
-
 
 const corsOptions = {
   origin: "*",
@@ -29,7 +24,6 @@ dotenv.config();
 // App Init
 const app = express();
 
-
 // Middlewares
 app.use(cors(corsOptions));
 app.use(logger("dev"));
@@ -39,7 +33,6 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(loggerMiddleware);
-
 
 app.use("/api/v1", v1Router);
 // catch 404 and forward to error handler
@@ -52,10 +45,10 @@ app.use(function (req, res, next) {
 app.use(errorHandler);
 
 // error handler
-app.use(function (err, req, res, next) {
-  // Handle errors as JSON responses
-  res.status(err.status || 500).json({ error: err.message });
-});
+// app.use(function (err, req, res, next) {
+//   // Handle errors as JSON responses
+//   res.status(err.status || 500).json({ error: err.message });
+// });
 
 // Establish the database connection
 dbConnection()
@@ -65,15 +58,5 @@ dbConnection()
   .catch((error) => {
     console.error("Error establishing database connection:", error);
   });
-
-sequelize.sync({force:true})
-.then(result => {
-  console.log('Database synchronized')
-})
-.catch(err => {
-  console.log(err)
-});
-
-
 
 module.exports = app;

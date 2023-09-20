@@ -1,7 +1,7 @@
-const db = require("../models/index");
+const { Lunches } = require("../models");
 
 // create main Model
-const Reward = db.models.reward;
+const Reward = Lunches;
 
 /**
  *  @description  Create reward
@@ -117,7 +117,6 @@ const getOneReward = async (req, res) => {
     });
   }
 };
-
 
 module.exports = {
   addReward,
