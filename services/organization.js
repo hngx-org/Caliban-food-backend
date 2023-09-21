@@ -17,10 +17,6 @@ const createOrganization = async (organizationData) => {
   }
 };
 
-<<<<<<< HEAD
-module.exports = {
-  createOrganization,
-=======
 // Update an existing organization
 const updateOrganization = async (orgId, updatedData) => {
   try {
@@ -49,5 +45,4 @@ const updateOrganization = async (orgId, updatedData) => {
 module.exports = {
   createOrganization,
   updateOrganization, // Export the new service function for updating organizations
->>>>>>> origin/main
 };

@@ -1,9 +1,10 @@
 const express = require('express');
-const router = express.Router;
+const router = express.Router();
 
-const OrgController = require('../controllers/organization');
+const orgController = require('../../controllers/organization');
+const authenticateToken = require('../../middleware/user');
 
-//create a new organization method: POST
-router.post('/create', OrgController.createOrg);
+router.put('/create/:orgId', authenticateToken, orgController.createOrUpdateOrg);
+
 
 module.exports = router;

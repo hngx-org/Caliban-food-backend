@@ -1,20 +1,36 @@
-const createOrgService = require('../services/organization');
+const orgService = require('../services/organization');
 
-//create a new organization
-const createOrg = async (req, res) => {
+const createOrUpdateOrg = async (req, res) => {
     try {
-        const orgData = req.body;
+        const { organization_name, lunch_price } = req.body;
 
-        const newOrg = await createOrgService.createOrganization(orgData);
+        //check if orgId is provided (indicating an update) if not (indicate creation)
+        const orgId = req.params.orgI; //Assuming if orgId is passed in the url
 
-        return res.status(201).json({message: 'created organization succesfully', organization: newOrg});
+        if (orgId) {
+            //if orgId is provided it is treated as creation
+            const updateOrg = await orgService.updateOrganization(orgId, {
+                organization_name,
+                lunch_price,
+            });
+
+            return res.status(200).json({ message: 'Organization created or updated successfully', updateOrg});
+        } else {
+            //if orgId is not provided it is treated as creation
+            const createOrg = await orgService.createOrganization({
+                organization_name,
+                lunch_price,
+            });
+
+            return res.status(201).json({ message: 'Organization created or updated successfully', createOrg});
+        }
+
     } catch (err) {
-        console.error('Error creating organization:', err);
-
-        return res.status(500).json({message: 'Internal server error'});
+        console.log('Error creating or updating organization', err)
+        return res.status(500).json({ message:'Internal server error' })
     }
 };
 
 module.exports = {
-    createOrg,
+    createOrUpdateOrg,
 }
