@@ -6,7 +6,7 @@ const authMiddleware = require("../../middleware/user");
 const withdrawalController = require("../../controllers/withdraw");
 
 router.post(
-  "/api/withdrawal/request",
+  "/withdrawal/request",
   authMiddleware,
   withdrawalController.makeWithdrawal
 );

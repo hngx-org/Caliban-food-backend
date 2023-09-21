@@ -8,8 +8,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 // const db = require("./configs/dbConfig");
-const v1Router = require('./routes/api/index');
-const bank = require('./routes/api/userInfo');
+const routes = require('./routes/api/index');
+// const bank = require('./routes/api/userInfo');
 
 const errorHandler = require('./utils/errrorHandler');
 const { loggerMiddleware } = require('./utils/logger');
@@ -22,7 +22,7 @@ const corsOptions = {
 };
 
 dotenv.config();
-const sequelize = require("./configs/dbConfig");
+
 // App Init
 const app = express();
 
@@ -35,15 +35,10 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// App Home Route
-app.get("/", (req, res) => {
-  res.send("Welcome to the Lunch App API");
-});
+app.use('/api', routes);
 
-// Register Routes
-require("./routes/index.routes")(app);
 
-// We'd uncomment this db function call once we have the connection strings and add it to the db file.
-// db();
+// Establish the database connection
+dbConnection();
 
 module.exports = app;

@@ -16,11 +16,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   Withdrawals.init(
     {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
       user_id: DataTypes.INTEGER,
       status: DataTypes.ENUM("pending", "approved", "rejected"),
       amount: DataTypes.DECIMAL(10, 2),
