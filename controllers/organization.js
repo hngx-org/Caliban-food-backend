@@ -5,7 +5,7 @@ const createOrUpdateOrg = async (req, res) => {
         const { organization_name, lunch_price } = req.body;
 
         //check if orgId is provided (indicating an update) if not (indicate creation)
-        const orgId = req.params.orgI; //Assuming if orgId is passed in the url
+        const orgId = req.params.orgId; //Assuming if orgId is passed in the url
 
         if (orgId) {
             //if orgId is provided it is treated as creation
