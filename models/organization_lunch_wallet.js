@@ -25,11 +25,31 @@ module.exports = (sequelize, DataTypes) => {
       },
       balance: DataTypes.DECIMAL(10, 2),
       org_id: DataTypes.INTEGER,
+      is_deleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      created_at: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        defaultValue: sequelize.literal(
+          "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+        ),
+      },
+      updated_at: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        defaultValue: sequelize.literal(
+          "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+        ),
+      },
     },
     {
       sequelize,
       modelName: "OrganizationLaunchWallet",
       tableName: "organization_launch_wallet",
+      timestamps: false,
     }
   );
   return Organization_lunch_wallet;
