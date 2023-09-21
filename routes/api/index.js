@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const UserRoutes = require("./user");
-const CreateOrganizationRoute = require('./organization')
+const CreateOrganizationRoute = require('../../controllers/organization').createOrg
 
 router.use("/", UserRoutes);
 router.use('/organization', CreateOrganizationRoute)
