@@ -16,7 +16,8 @@ const Reward = Lunches;
 // destructuring
 const addReward = async (req, res) => {
   try {
-    const { senderId, receiverId, quantity, note } = req.body;
+    const { receiverId, quantity, note } = req.body;
+    const {id} = req.user;
     if (typeof quantity == "string") {
       return res.status(400).json({
         message: "Invalid Quantity",
@@ -31,8 +32,8 @@ const addReward = async (req, res) => {
     }
 
     const createReward = {
-      senderId,
-      receiverId,
+      sender_id: id,
+      receiver_id:receiverId,
       quantity,
       note,
     };
