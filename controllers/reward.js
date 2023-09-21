@@ -17,7 +17,7 @@ const Reward = Lunches;
 const addReward = async (req, res) => {
   try {
     const { receiverId, quantity, note } = req.body;
-    const {id} = req.user;
+    const { id } = req.user;
     if (typeof quantity == "string") {
       return res.status(400).json({
         message: "Invalid Quantity",
@@ -33,7 +33,7 @@ const addReward = async (req, res) => {
 
     const createReward = {
       sender_id: id,
-      receiver_id:receiverId,
+      receiver_id: receiverId,
       quantity,
       note,
     };
@@ -64,11 +64,16 @@ const addReward = async (req, res) => {
 
 const getAllReward = async (req, res) => {
   try {
-    const { id } = req.body.user;
-    let rewardReceived = await Reward.findAll({ where: { receiverId: id } });
-    let rewardSent = await Reward.findAll({ where: { senderId: id } });
-
-    const reward = [...rewardReceived, ...rewardSent];
+    const { id } = req.user;
+    const { org_id } = await User.findOne({ where: { id: id } });
+    const reward = await Reward.findAll({
+      where: {
+        [Op.or]: [
+          { receiver_id: id, org_id },
+          { sender_id: id, org_id },
+        ],
+      },
+    });
 
     //check if any rewards exist
     if (reward.length === 0) {
