@@ -25,6 +25,6 @@ module.exports = {
     dialect: 'mysql',
   },
 
-  JWT_SECRET: 'ady4567',
-  JWT_EXPIRE: '10d',
+  JWT_SECRET: process.env.JWT_SECRET,
+  JWT_EXPIRE: process.env.JWT_EXPIRE,
 };
