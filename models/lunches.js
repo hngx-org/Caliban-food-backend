@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "receiver_id",
         as: "receiver",
       });
+      Lunches.belongsTo(models.Organization, {
+        foreignKey: "org_id",
+        as: "organization",
+      });
     }
   }
   Lunches.init(
@@ -29,12 +33,22 @@ module.exports = (sequelize, DataTypes) => {
       quantity: DataTypes.INTEGER,
       redeemed: DataTypes.BOOLEAN,
       note: DataTypes.TEXT,
-      created_at: DataTypes.DATE,
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
     },
     {
       sequelize,
       modelName: "Lunches",
-      tableName: "lunches"
+      tableName: "lunches",
+      timestamps: false,
     }
   );
   return Lunches;

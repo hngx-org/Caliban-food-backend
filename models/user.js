@@ -6,7 +6,7 @@ const {
 const jwt = require("jsonwebtoken");
 
 // const { JWT_SECRET, JWT_EXPIRE } = require("../config/env");
-const { JWT_SECRET, JWT_EXPIRE } = require("../config/config");
+const { JWT_SECRET, JWT_EXPIRE } = require("../config/env");
 
 
 module.exports = (sequelize, DataTypes) => {
@@ -66,6 +66,9 @@ module.exports = (sequelize, DataTypes) => {
       bank_number: DataTypes.STRING(255),
       bank_code: DataTypes.STRING(255),
       bank_name: DataTypes.STRING(255),
+      bank_region: DataTypes.STRING(255),
+      currency: DataTypes.STRING(128),
+      currency_code: DataTypes.STRING(4),
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -81,6 +84,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "User",
       tableName: "users",
+      timestamps: false,
     }
   );
 

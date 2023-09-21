@@ -10,9 +10,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-     
       Organization.hasMany(models.User, { foreignKey: "org_id", as: "users" });
-    
+
       //change here
       Organization.hasMany(models.Organization_invites, {
         foreignKey: "org_id",
@@ -22,6 +21,12 @@ module.exports = (sequelize, DataTypes) => {
       Organization.hasOne(models.OrganizationLaunchWallet, {
         foreignKey: "org_id",
         as: "launchWallet",
+      });
+
+      // Association with the Lunches model (lunches)
+      Organization.hasMany(models.Lunches, {
+        foreignKey: "org_id",
+        as: "lunches",
       });
     }
   }
@@ -34,12 +39,31 @@ module.exports = (sequelize, DataTypes) => {
       },
       name: DataTypes.STRING(255),
       lunch_price: DataTypes.DECIMAL(10, 2),
-      currency: DataTypes.STRING(3),
+      currency_code: {
+        type: DataTypes.STRING(4),
+        allowNull: false,
+      },
+      is_deleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      }
     },
     {
       sequelize,
-      modelName: "Organization", // Adjust the model name to start with a capital letter
-      tableName: "organization", // Set the table name to match the native MySQL script
+      modelName: "Organization",
+      tableName: "organization",
+      timestamps: false,
     }
   );
   return Organization;

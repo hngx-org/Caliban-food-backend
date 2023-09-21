@@ -58,12 +58,6 @@ app.use(function (err, req, res, next) {
 });
 
 // Establish the database connection
-dbConnection()
-  .then(() => {
-    console.log("database Connection has been established successfully.");
-  })
-  .catch((error) => {
-    console.error("Error establishing database connection:", error);
-  });
+dbConnection();
 
 module.exports = app;
