@@ -50,7 +50,6 @@ Start the API locally using the following commands:
 
 The API will be accessible at http://localhost:3000 by default.
 
-
 ## Endpoints
 
 The base URL for all API endpoints is: [https://](https://)
