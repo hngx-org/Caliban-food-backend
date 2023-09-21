@@ -1,40 +1,57 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const dotenv = require("dotenv").config();
-const cors = require("cors");
+const express = require('express');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const dotenv = require('dotenv');
+const cors = require('cors');
 // const db = require("./configs/dbConfig");
-const db = require("./configs/dbConfig");
-const sequelize = require("./configs/dbConfig");
+const routes = require('./routes/api/index');
+
+const errorHandler = require('./utils/errrorHandler');
+const { loggerMiddleware } = require('./utils/logger');
+const { dbConnection } = require('./utils/database/dbConnection');
+
+const corsOptions = {
+  origin: '*',
+  credentials: true, // access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+
+dotenv.config();
 // App Init
 const app = express();
 
 // Middlewares
-app.use(cors());
+app.use(cors(corsOptions));
+app.use(logger('dev'));
+app.use(express.json());
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-(async () => {
-  await db.sequelize.sync();
-})();
-
-// App Home Route
-app.get("/", (req, res) => {
-  res.send("Welcome to the Lunch App API");
-});
+app.use(loggerMiddleware);
 
 // Register Routes
-require("./routes/index.routes")(app);
 
-// We'd uncomment this db function call once we have the connection strings and add it to the db file.
-// db();
+app.use('/api', routes);
 
-// sequelize
-//   .sync()
-//   .then((result) => {
-//     console.log("Database synchronized");
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404));
+});
+
+app.use(errorHandler);
+
+app.use(function (err, req, res, next) {
+  // Handle errors as JSON responses
+  res.status(err.status || 500).json({ error: err.message });
+});
+// Establish the database connection
+dbConnection()
+  .then(() => {
+    console.log('database Connection has been established successfully.');
+  })
+  .catch((error) => {
+    console.error('Error establishing database connection:', error);
+  });
 
 module.exports = app;
