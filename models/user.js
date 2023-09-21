@@ -1,46 +1,36 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 
-const jwt = require("jsonwebtoken");
-
-// const { JWT_SECRET, JWT_EXPIRE } = require("../config/env");
-const { JWT_SECRET, JWT_EXPIRE } = require("../config/env");
-
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET, JWT_EXPIRE } = require('../config/config');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
       // Define association to the Organization model (assuming you have an Organization model)
       User.belongsTo(models.Organization, {
-        foreignKey: "org_id",
-        as: "organization",
+        foreignKey: 'org_id',
+        as: 'organization',
       });
 
       // Define association to the Withdrawal model (assuming you have a Withdrawal model)
       User.hasMany(models.Withdrawals, {
-        foreignKey: "user_id",
-        as: "withdrawals",
+        foreignKey: 'user_id',
+        as: 'withdrawals',
       });
 
-      // Define association to the Launch model (assuming you have a Launch model)
+      // Define association to the Lunch model (assuming you have a Lunch model)
       User.hasMany(models.Lunches, {
-        foreignKey: "sender_id",
-        as: "sentLaunches",
+        foreignKey: 'sender_id',
+        as: 'sentLaunches',
       });
       User.hasMany(models.Lunches, {
-        foreignKey: "receiver_id",
-        as: "receivedLaunches",
+        foreignKey: 'receiver_id',
+        as: 'receivedLaunches',
       });
     }
   }
+
   User.init(
     {
       id: {
@@ -72,12 +62,12 @@ module.exports = (sequelize, DataTypes) => {
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'), // Set the current timestamp
       },
       updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'), // Set the current timestamp
       },
     },
     {

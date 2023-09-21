@@ -1,4 +1,4 @@
-const { signupUser, loginUser } = require("../services/user");
+const { signupUser, loginUser } = require('../services/user');
 
 // Controller function for user signup
 async function userSignup(req, res, next) {
@@ -30,7 +30,6 @@ async function userSignup(req, res, next) {
     next(error);
   }
 }
-
 
 // Controller function for user login
 async function userLogin(req, res, next) {
