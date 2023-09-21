@@ -1,30 +1,30 @@
-const Sequelize = require("sequelize");
+require('dotenv').config();
 
-// Creating new Object of Sequelize
-const sequelize = new Sequelize("freelunch", "root", "", {
-  // Explicitly specifying
-  // mysql database
-  // So by default, host is 'localhost'
-  host: "localhost",
-  dialect: "mysql",
+module.exports = {
+  development: {
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_DIALECT,
+    port: process.env.DB_PORT,
+  },
+  test: {
+    username: 'root',
+    password: null,
+    database: 'database_test',
+    host: '127.0.0.1',
+    dialect: 'mysql',
+  },
 
-  logging: console.warn, // Enable logging
-});
+  production: {
+    username: 'root',
+    password: null,
+    database: 'database_production',
+    host: '127.0.0.1',
+    dialect: 'mysql',
+  },
 
-const db = {};
-db.sequelize = sequelize;
-db.models = {};
-db.models.Lunches = require("../models/lunches")(
-  sequelize,
-  Sequelize.DataTypes
-);
-// sequelize
-//   .authenticate()
-//   .then(() => {
-//     console.log("Connection established");
-//   })
-//   .catch((err) => {
-//     console.log("error during connecting");
-//   });
-
-module.exports = db;
+  JWT_SECRET: 'ady4567',
+  JWT_EXPIRE: '10d',
+};
