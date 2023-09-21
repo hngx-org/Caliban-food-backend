@@ -15,6 +15,16 @@ module.exports = function (err, req, res, next) {
       err.response.data.message) ||
     err.message ||
     "Something went wrong";
+  // let errorMessage;
+  // if (err.msg && typeof err.msg === 'string') {
+  //   errorMessage = err.msg;
+  // }
+  // if (err.response.message && typeof err.response.message === 'string') {
+  //   errorMessage = err.response.message;
+  // }
+  // if (err.response.message && typeof err.response.message === 'string') {
+  //   errorMessage = err.response.message;
+  // }
   const statusCode = err.code || err.statusCode || err.response?.status || 500;
 
   console.log("err ==> ", new Date().getUTCDate(), "<===>", err);
