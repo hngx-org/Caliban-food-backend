@@ -17,6 +17,37 @@ const createOrganization = async (organizationData) => {
   }
 };
 
+<<<<<<< HEAD
 module.exports = {
   createOrganization,
+=======
+// Update an existing organization
+const updateOrganization = async (orgId, updatedData) => {
+  try {
+    const updatedOrganization = await Organization.findByPk(orgId);
+
+    if (!updatedOrganization) {
+      throw new Error('Organization not found');
+    }
+
+    // Update the organization properties as needed
+    if (updatedData.organization_name) {
+      updatedOrganization.name = updatedData.organization_name;
+    }
+    if (updatedData.lunch_price) {
+      updatedOrganization.lunch_price = updatedData.lunch_price;
+    }
+
+    await updatedOrganization.save();
+
+    return updatedOrganization;
+  } catch (error) {
+    throw new Error('Error updating organization');
+  }
+};
+
+module.exports = {
+  createOrganization,
+  updateOrganization, // Export the new service function for updating organizations
+>>>>>>> origin/main
 };

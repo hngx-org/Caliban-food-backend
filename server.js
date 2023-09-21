@@ -1,7 +1,6 @@
 const createServer = require("http").createServer;
 const app = require("./app");
-const db = require("./config/dbConfig");
-const PORT = process.env.PORT || 7001;
+const PORT = process.env.PORT || 6001;
 
 const server = createServer(app);
 server.listen(PORT, () => {
