@@ -11,7 +11,7 @@ const Reward = Lunches;
  */
 
 // 1. create reward
-
+// destructuring
 const addReward = async (req, res) => {
   try {
     const { senderId, receiverId, quantity, note } = req.body;
