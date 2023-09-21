@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+// const db = require("./configs/dbConfig");
 const v1Router = require('./routes/api/index');
 const bank = require('./routes/api/userInfo');
 
@@ -21,7 +22,7 @@ const corsOptions = {
 };
 
 dotenv.config();
-
+const sequelize = require("./configs/dbConfig");
 // App Init
 const app = express();
 
@@ -33,34 +34,16 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(loggerMiddleware);
 
-// Routes to search user, getprofile, and create bank
-// app.use('/api/v1', bank);
-
-app.use('/api/v1', v1Router);
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
+// App Home Route
+app.get("/", (req, res) => {
+  res.send("Welcome to the Lunch App API");
 });
 
-// app.use("/api/v1", v1Router);
+// Register Routes
+require("./routes/index.routes")(app);
 
-app.use(errorHandler);
-
-// error handler
-// app.use(function (err, req, res, next) {
-//   // Handle errors as JSON responses
-//   res.status(err.status || 500).json({ error: err.message });
-// });
-
-// Establish the database connection
-dbConnection()
-  .then(() => {
-    console.log('database Connection has been established successfully.');
-  })
-  .catch((error) => {
-    console.error('Error establishing database connection:', error);
-  });
+// We'd uncomment this db function call once we have the connection strings and add it to the db file.
+// db();
 
 module.exports = app;
