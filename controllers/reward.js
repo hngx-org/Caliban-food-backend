@@ -15,7 +15,7 @@ const Reward = Lunches;
 const addReward = async (req, res) => {
   try {
     const { senderId, receiverId, quantity, note } = req.body;
-    if (isNaN(quantity)) {
+    if (typeof quantity == 'string') {
       return res.status(400).json({
         message: "Invalid Quantity",
         statusCode: 400,
@@ -41,6 +41,7 @@ const addReward = async (req, res) => {
       data: null,
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       message: `Error creating Reward: ${error?.message}`,
       statusCode: 500,
