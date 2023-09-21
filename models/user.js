@@ -56,22 +56,25 @@ module.exports = (sequelize, DataTypes) => {
       bank_number: DataTypes.STRING(255),
       bank_code: DataTypes.STRING(255),
       bank_name: DataTypes.STRING(255),
+      bank_region: DataTypes.STRING(255),
+      currency: DataTypes.STRING(128),
+      currency_code: DataTypes.STRING(4),
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'), // Set the current timestamp
+        defaultValue: DataTypes.NOW,
       },
       updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'), // Set the current timestamp
+        defaultValue: DataTypes.NOW,
       },
     },
     {
       sequelize,
       modelName: 'User',
       tableName: 'users',
-      timestamps: false, // Disable automatic timestamps
+      timestamps: false,
     }
   );
 

@@ -27,11 +27,27 @@ module.exports = (sequelize, DataTypes) => {
       email: DataTypes.STRING(255),
       token: DataTypes.STRING(255),
       ttl: DataTypes.DATE,
+      is_deleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
     },
     {
       sequelize,
       modelName: "Organization_invites",
       tableName: "organization_invites",
+      timestamps: false,
     }
   );
   return Organization_invites;
