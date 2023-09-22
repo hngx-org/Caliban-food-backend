@@ -1,3 +1,7 @@
+const { Lunches } = require("../models");
+const { User } = require("../models");
+
+const Reward = Lunches;
 const { signupUser, loginUser } = require('../services/user');
 
 // Controller function for user signup
@@ -47,7 +51,112 @@ async function userLogin(req, res, next) {
   }
 }
 
+const redeemLunch = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const { org_id, lunch_credit_balance } = await User.findOne({
+      where: { id: id },
+    });
+    
+    const { ids } = req.body; // Assuming you expect an object with an "ids" property containing an array of IDs
+    
+
+    // const missingRewards = [];
+
+    if (!ids || !Array.isArray(ids)) {
+      return res.status(400).json({
+        message: "Invalid request body. 'ids' must be an array.",
+        statusCode: 400,
+        data: null,
+      });
+    }
+
+
+for (const paramsId of ids) {
+  const checkReward = await Reward.findOne({
+    where: {
+      receiver_id: id,
+      org_id,
+      id: paramsId,
+    },
+  });
+
+  if(!checkReward) {
+    res.json({message: "Not all rewards exist or match the provided ID"})
+   }
+  }
+
+
+
+return;
+
+    for (const paramsId of ids) {
+      const checkReward = await Reward.findOne({
+        where: {
+          receiver_id: id,
+          org_id,
+          id: paramsId,
+        },
+
+        
+      });
+
+
+
+      if (!checkReward) {
+        return res.status(404).json({
+          message: `No Reward Found for ID ${paramsId}`,
+          statusCode: 404,
+          data: null,
+        });
+      }
+
+      if (checkReward.redeemed) {
+        return res.status(400).json({
+          message: `Reward with ID ${paramsId} has already been redeemed`,
+          statusCode: 400,
+          data: null,
+        });
+      }
+
+      // Redeem the reward for the current ID
+      await Reward.update(
+        { redeemed: true },
+        {
+          where: {
+            receiver_id: id,
+            org_id: org_id,
+            id: paramsId,
+          },
+        }
+      );
+
+      // Update the lunch credit balance for the current ID
+      const newPrice = lunch_credit_balance + checkReward.quantity;
+      await User.update(
+        { lunch_credit_balance: newPrice },
+        { where: { id: id } }
+      );
+    }
+
+    // Respond with a success message once all IDs are processed
+    return res.status(200).json({
+      message: "Lunch rewards redeemed successfully",
+      statusCode: 200,
+      data: null,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error redeeming Lunch: ${error?.message}`,
+      statusCode: 500,
+      data: null,
+    });
+  }
+};
+
+
 module.exports = {
   userSignup,
   userLogin,
+  redeemLunch,
 };
