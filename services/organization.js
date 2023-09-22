@@ -85,7 +85,7 @@ const createOrganizationInvite = async (email, orgUserId) => {
   // user can only send email invite when he is an admin else it throws an error
 
   // add function to send email from the helper file and also attached the generated token to your email
-  await sendMail(email);
+  await sendMail(email, token);
   try {
     const newOrganizationInvite = await Organization_invites.create({
       email: email,
