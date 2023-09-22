@@ -38,7 +38,7 @@ async function userLogin(req, res, next) {
     const { user, token } = await loginUser({ email, password });
 
     // Return a success response with user data and JWT token
-    res.status(200).json({ success: true, user, token });
+    res.status(200).json({ success: true, token });
   } catch (error) {
     // Handle any errors that occurred during login
     next(error);
