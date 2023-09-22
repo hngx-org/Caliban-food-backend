@@ -10,11 +10,7 @@ dotenv.config();
 const server = createServer(app);
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-<<<<<<< HEAD
-});
-=======
-
   // Establish the database connection
   dbConnection(process.env.DB_URL);
 });
->>>>>>> origin/main
+
