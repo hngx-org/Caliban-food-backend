@@ -18,6 +18,7 @@ const addReward = async (req, res) => {
   try {
     const { receiverId, quantity, note } = req.body;
     const { id } = req.user;
+    const { org_id } = await User.findOne({ where: { id: id } });
     if (typeof quantity == "string") {
       return res.status(400).json({
         message: "Invalid Quantity",
@@ -36,6 +37,7 @@ const addReward = async (req, res) => {
       receiver_id: receiverId,
       quantity,
       note,
+      org_id
     };
     await Reward.create(createReward);
     res.status(201).json({
@@ -55,7 +57,7 @@ const addReward = async (req, res) => {
 
 /**
  *  @description  Get all rewards
- *  @route        GET /api/lunch/:params/:id
+ *  @route        GET /api/lunch/all
  *  @access       Public
  *
  */
@@ -146,5 +148,5 @@ const getOneReward = async (req, res) => {
 module.exports = {
   addReward,
   getAllReward,
-  getOneReward
+  getOneReward,
 };
