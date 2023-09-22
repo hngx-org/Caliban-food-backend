@@ -1,22 +1,30 @@
 const express = require('express');
 const router = express.Router();
-
+const { signupUser} = require('../services/user');
 const orgController = require('../../controllers/organization');
 const authenticateToken = require('../../middleware/user');
 
 router.put('/create/:orgId', authenticateToken, orgController.createOrUpdateOrg);
 
-router.post("/staff/signup", async (req, res)=>{
+
+router.post("/staff/signup", async (req, res, next)=>{
     try {
           const  {email, password, otpToken, firstName, lastName, phoneNumber} = req.body
 
+          if (!phoneNumber){
+                throw new Error("Phone number missing");
+          }
+
+          // logic to convert otp to orgId goes here
+
           // Call the signupUser service function
-          const { user, token } = await signupUser({
+          const user  = await signupUser({
           email,
           password,
           orgId,
           firstName,
           lastName,
+          phoneNumber
       });
     
           const formattedUser = {
@@ -30,7 +38,7 @@ router.post("/staff/signup", async (req, res)=>{
           updated_at: user.updated_at,
       };
       
-    res.status(201).json({ success: true, user: formattedUser, token });
+    res.status(201).json({ success: true, user: formattedUser});
   } catch (error) {
     next(error);
   }
