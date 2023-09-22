@@ -131,7 +131,7 @@ describe("Test App Functionalities", ()=> {
             expect(result.body).toMatchObject({ success: true });
         })
 
-        test.only("Get all Users NOT AUTHORIZES", async () => {
+        test.only("Get all Users NOT AUTHORIZED", async () => {
           const result = await supertest(app)
               .get("/api/users")
               // .set('Authorization', `Bearer ${value.key2}`)
