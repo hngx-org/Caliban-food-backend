@@ -12,7 +12,7 @@ require("dotenv").config();
 //     port: process.env.BD_PORT
 //   }
 // );
-const database = new Sequelize(process.env.DB_URL_TEST)
+const database = new Sequelize(process.env.DB_URL)
 
 // Connection to db
 const dbConnection = async () => { 
