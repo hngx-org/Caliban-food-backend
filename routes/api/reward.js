@@ -6,7 +6,7 @@ const router = express.Router();
 const {
   addReward,
   getAllReward,
-  getOneReward
+  getOneReward,
 } = require("../../controllers/reward");
 
 router.post("/send", authenticateToken, addReward);
