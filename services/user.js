@@ -24,10 +24,7 @@ async function signupUser({ email, password, phone, firstName, lastName }) {
       is_admin: true,
     });
 
-    // Generate a JWT for authentication
-    const token = newUser.getSignedToken(newUser);
-
-    return { user: newUser, token };
+    return { user: newUser };
   } catch (error) {
     throw error;
   }
