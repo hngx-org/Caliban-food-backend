@@ -143,8 +143,76 @@ const getOneReward = async (req, res) => {
   }
 };
 
+/**
+ *  @description  Redeem a single reward and add the redeemed to the user lunch_credit
+ *  @route        GET /api/redeem/:id
+ *  @access       Public
+ *
+ */
+
+// 4. get single reward and redeem it
+
+const redeemLunch = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const { org_id, lunch_credit_balance } = await User.findOne({
+      where: { id: id },
+    });
+    const paramsId = req.params.id;
+    const checkReward = await Reward.findOne({
+      where: {
+        receiver_id: id,
+        org_id,
+        id: paramsId,
+      },
+    });
+    if (!checkReward) {
+      return res.status(404).json({
+        message: "No Reward Found",
+        statusCode: 404,
+        data: null,
+      });
+    }
+    if (checkReward.redeemed) {
+      return res.status(400).json({
+        message: "Reward Redeemed Already",
+        statusCode: 400,
+        data: null,
+      });
+    }
+    const reward = await Reward.update(
+      { redeemed: true },
+      {
+        where: {
+          receiver_id: id,
+          org_id,
+          id: paramsId,
+        },
+      }
+    );
+    const newPrice = lunch_credit_balance + checkReward.quantity;
+    await User.update(
+      { lunch_credit_balance: newPrice },
+      { where: { id: id } }
+    );
+    const updatedUser = await User.findOne({ where: { id: id } });
+    return res.status(200).json({
+      message: "Lunch redeemed successfully",
+      statusCode: 200,
+      data: null,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error redeeming Lunch: ${error?.message}`,
+      statusCode: 500,
+      data: null,
+    });
+  }
+};
+
 module.exports = {
   addReward,
   getAllReward,
   getOneReward,
+  redeemLunch,
 };
