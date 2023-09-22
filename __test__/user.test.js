@@ -3,14 +3,33 @@ const createServer = require("http").createServer;
 const startApp = require("../app");
 const testDatabase = require("./dbConnect"); // Import the test database configuration
 const { dbConnection } = require("../utils/database/dbConnection");
-const { SignUp } = require("./body.json/user.body")
+const { SignUp, login } = require("./body.json/user.body")
 
 const app = createServer(startApp);
 
+const maxRetries = 5;
+const retryDelay = 2000; // 2 seconds
+
+let retries = 0;
+
+async function connectToDatabase() {
+  try {
+    await testDatabase.authenticate();
+    console.log("Connected to the test database");
+  } catch (error) {
+    if (retries < maxRetries) {
+      retries++;
+      console.log(`Connection attempt ${retries} failed. Retrying in ${retryDelay / 1000} seconds...`);
+      setTimeout(connectToDatabase, retryDelay);
+    } else {
+      console.error("Max retry attempts reached. Unable to connect to the database.");
+    }
+  }
+}
+
 beforeAll(async () => {
-  // Establish a connection to the test database
-  await testDatabase.authenticate();
-  console.log("Connected to the test database");
+    // awaiting to connect to the database with retries
+    await connectToDatabase();
 
   // Initialize your database tables or perform any setup needed for testing
   // For example:
@@ -31,12 +50,11 @@ afterAll(async () => {
 describe("Test App Functionalities", ()=> {
     describe("Testing User Routes", () =>{
         // Register
-        test.only("SignUp user", async () => {
+        test("SignUp user", async () => {
             const result = await supertest(app)
                     .post("/api/signup")
                     .send(SignUp)
             
-            console.log(result.error)
             value.key1 = result.body.user.id
             value.key2 = result.body.token
             
@@ -60,6 +78,15 @@ describe("Test App Functionalities", ()=> {
         })
 
         // Login
+        test("Unauthorized login", async () => {
+          const result = await supertest(app)
+              .post("/api/login")
+              .send({ email: "dagger@gmail.com", password: "569484" })
+
+          expect(result.statusCode).toBe(401)
+          expect(result.body.error).toEqual("Unauthorized")
+      })
+
         test("Wrong login Credentials", async () => {
             const result = await supertest(app)
                 .post("/api/login")
@@ -74,11 +101,10 @@ describe("Test App Functionalities", ()=> {
             const result = await supertest(app)
                     .post("/api/login")
                     .send(login)
-                    .set('Authorization', `Bearer ${value.key2}`)
+                    // .set('Authorization', `Bearer ""`)
 
-
-            value.key = result.body.Member_id
-            value.key3 = result.body.token // login token
+            // value.key = result.body.Member_id
+            value.key2 = result.body.token // login token to overide previous token
             expect(result.statusCode).toBe(200)
             expect(result.body).toEqual({
                 success: true,
@@ -91,31 +117,50 @@ describe("Test App Functionalities", ()=> {
                 }),
                 token: expect.any(String)
             })
+        }, 15000)
+
+        // Get Profile
+        test("Get My Profile", async () => {
+            const result = await supertest(app)
+                .get("/api/v1/members/")
+                .set('Authorization', `Bearer ${value.key2}`)
+
+                // console.info(result.body)
+            expect(result.statusCode).toBe(201)
+            expect(result.body.message).toEqual(MESSAGES.USER.FETCHED)
+            expect(result.body).toMatchObject({ success: true });
         })
 
-        // // Get Profile
-        // test("Get My Profile", async () => {
-        //     const result = await supertest(app)
-        //         .get("/api/v1/members/")
-        //         .set('Authorization', `Bearer ${value.key2}`)
+        test.only("Get all Users NOT AUTHORIZES", async () => {
+          const result = await supertest(app)
+              .get("/api/users")
+              // .set('Authorization', `Bearer ${value.key2}`)
 
-        //         // console.info(result.body)
-        //     expect(result.statusCode).toBe(201)
-        //     expect(result.body.message).toEqual(MESSAGES.USER.FETCHED)
-        //     expect(result.body).toMatchObject({ success: true });
-        // })
+          expect(result.statusCode).toBe(401)
+          expect(result.body.error).toBe("Unauthorized")
+        })
 
-        // // Update
-        // test("Update Member", async () => {
-        //     const result = await supertest(app)
-        //         .patch("/api/v1/members/")
-        //         .send({ married: true, level: "5", state_of_origin: "Anambra", LGA: "Njikoka" })
-        //         .set('Authorization', `Bearer ${value.key2}`)
+        test("Get all Users", async () => {
+          const result = await supertest(app)
+              .get("/api/users")
+              .set('Authorization', `Bearer ${value.key2}`)
 
-        //     expect(result.statusCode).toBe(200)
-        //     expect(result.body.message).toEqual(MESSAGES.USER.UPDATED)
-        //     expect(result.body).toMatchObject({ success: true });
-        // })
+          expect(result.statusCode).toBe(200)
+          expect(result.body.data).toBeInstanceOf(Array)
+          expect(result.body).toMatchObject({ message: "success" });
+      }, 15000)
+
+        // Update
+        test("Update Member", async () => {
+            const result = await supertest(app)
+                .patch("/api/v1/members/")
+                .send({ married: true, level: "5", state_of_origin: "Anambra", LGA: "Njikoka" })
+                .set('Authorization', `Bearer ${value.key2}`)
+
+            expect(result.statusCode).toBe(200)
+            expect(result.body.message).toEqual(MESSAGES.USER.UPDATED)
+            expect(result.body).toMatchObject({ success: true });
+        })
 
     })
 })
