@@ -20,6 +20,7 @@ async function signupUser({ email, password, orgId, firstName, lastName }) {
       org_id: orgId,
       first_name: firstName,
       last_name: lastName,
+      is_admin: true
     });
 
     // Generate a JWT for authentication
