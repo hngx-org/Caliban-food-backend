@@ -13,7 +13,6 @@ const routes = require('./routes/api/index');
 
 const errorHandler = require('./utils/errrorHandler');
 const { loggerMiddleware } = require('./utils/logger');
-const { dbConnection } = require('./utils/database/dbConnection');
 
 const corsOptions = {
   origin: '*',
@@ -36,8 +35,5 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api', routes);
-
-// Establish the database connection
-dbConnection();
 
 module.exports = app;

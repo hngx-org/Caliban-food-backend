@@ -5,6 +5,7 @@ async function userSignup(req, res, next) {
   try {
     const { email, password, orgId, firstName, lastName } = req.body;
 
+    console.log("You got Here: 1")
     // Call the signupUser service function
     const { user, token } = await signupUser({
       email,
@@ -13,7 +14,7 @@ async function userSignup(req, res, next) {
       firstName,
       lastName,
     });
-
+    
       const formattedUser = {
         id: user.id,
         email: user.email,
