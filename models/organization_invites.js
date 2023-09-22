@@ -1,7 +1,7 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
+const { JWT_EXPIRE, JWT_SECRET } = require("../config/config");
+const jwt = require("jsonwebtoken");
 module.exports = (sequelize, DataTypes) => {
   class Organization_invites extends Model {
     /**
@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-       Organization_invites.belongsTo(models.Organization, {
-         foreignKey: "org_id",
-         as: "organization",
-       });
+      Organization_invites.belongsTo(models.Organization, {
+        foreignKey: "org_id",
+        as: "organization",
+      });
     }
   }
   Organization_invites.init(
