@@ -14,9 +14,9 @@ require("dotenv").config();
 // );
 const database = new Sequelize(process.env.DB_URL)
 
-
 // Connection to db
-const dbConnection = async () => {
+const dbConnection = async () => { 
+
   try {
     await database.authenticate();
     console.log("Connection has been established successfully.");
@@ -27,4 +27,4 @@ const dbConnection = async () => {
   }
 };
 
-module.exports = { database, dbConnection };
+module.exports = { dbConnection };
