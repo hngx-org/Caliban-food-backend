@@ -146,5 +146,5 @@ const getOneReward = async (req, res) => {
 module.exports = {
   addReward,
   getAllReward,
-  getOneReward,
+  getOneReward
 };

@@ -1,5 +1,8 @@
 const { validationResult } = require("express-validator");
 const orgService = require("../services/organization");
+const { Organization } = require("../models");
+const { User } = require("../models");
+const { string } = require("yargs");
 
 const createOrUpdateOrg = async (req, res) => {
   const { id } = req.user;
@@ -68,7 +71,49 @@ const sendOrganizationInvite = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+const updateLunchPrice = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const { org_id, is_admin } = await User.findOne({ where: { id: id } });
+    if (!is_admin) {
+      return res.status(400).json({
+        message: "Unauthorised",
+        statusCode: 400,
+        data: null,
+      });
+    }
+    const { lunch_price } = req.body;
+    if (typeof lunch_price === string) {
+      return res.status(400).json({
+        message: "Invalid Price",
+        statusCode: 400,
+        data: null,
+      });
+    }
+    const checkOrg = await Organization.findOne({ where: { id: org_id } });
+    if (!checkOrg) {
+      return res.status(200).json({
+        message: "No Organization found",
+        statusCode: 400,
+        data: null,
+      });
+    }
+    await Organization.update({ lunch_price }, { where: { id: org_id } });
+    return res.status(200).json({
+      message: "success",
+      statusCode: 200,
+      data: null,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: `Lunch Price Update Failed: ${error?.message}`,
+      statusCode: 500,
+      data: null,
+    });
+  }
+};
 module.exports = {
   createOrUpdateOrg,
   sendOrganizationInvite,
+  updateLunchPrice,
 };

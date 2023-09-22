@@ -5,6 +5,7 @@ async function signupUser({ email, password, orgId, firstName, lastName }) {
   try {
     // Check if the user with the same email already exists
     const existingUser = await User.findOne({ where: { email } });
+    
     if (existingUser) {
       throw new Error("Email is already in use");
     }
