@@ -52,6 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       is_admin: DataTypes.BOOLEAN,
+      lunch_credit_balance: DataTypes.INTEGER,
       refresh_token: DataTypes.STRING(255),
       bank_number: DataTypes.STRING(255),
       bank_code: DataTypes.STRING(255),

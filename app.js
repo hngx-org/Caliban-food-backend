@@ -36,4 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api', routes);
 
+// Establish the database connection
+dbConnection();
+
 module.exports = app;
