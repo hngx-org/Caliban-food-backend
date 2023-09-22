@@ -2,7 +2,7 @@ const { Lunches } = require("../models");
 const { User } = require("../models");
 
 const Reward = Lunches;
-const { signupUser, loginUser } = require('../services/user');
+const { signupUser, loginUser } = require("../services/user");
 
 // Controller function for user signup
 async function userSignup(req, res, next) {
@@ -27,7 +27,7 @@ async function userSignup(req, res, next) {
     //   updated_at: user.updated_at,
     // };
 
-    res.status(201).json({ success: 'User created Successfully' });
+    res.status(201).json({ success: "User created Successfully" });
   } catch (error) {
     next(error);
   }
@@ -55,11 +55,8 @@ const redeemLunch = async (req, res) => {
     const { org_id, lunch_credit_balance } = await User.findOne({
       where: { id: id },
     });
-    
-    const { ids } = req.body; // Assuming you expect an object with an "ids" property containing an array of IDs
-    
 
-    // const missingRewards = [];
+    const { ids } = req.body; // Assuming you expect an object with an "ids" property containing an array of IDs
 
     if (!ids || !Array.isArray(ids)) {
       return res.status(400).json({
@@ -68,76 +65,48 @@ const redeemLunch = async (req, res) => {
         data: null,
       });
     }
-
-
-for (const paramsId of ids) {
-  const checkReward = await Reward.findOne({
-    where: {
-      receiver_id: id,
-      org_id,
-      id: paramsId,
-    },
-  });
-
-  if(!checkReward) {
-    res.json({message: "Not all rewards exist or match the provided ID"})
-   }
-  }
-
-
-
-return;
-
+    let errorSeen = [];
     for (const paramsId of ids) {
-      const checkReward = await Reward.findOne({
-        where: {
-          receiver_id: id,
-          org_id,
-          id: paramsId,
-        },
-
-        
+      const hello = await checkValid(id, org_id, paramsId);
+      if (!hello) {
+        errorSeen.push(true);
+        break;
+      }
+    }
+    if (errorSeen.includes(true)) {
+      return res.status(404).json({
+        message: "Reward not found.",
+        statusCode: 404,
+        data: null,
       });
-
-
-
-      if (!checkReward) {
-        return res.status(404).json({
-          message: `No Reward Found for ID ${paramsId}`,
-          statusCode: 404,
-          data: null,
-        });
+    }
+    const redeemed = [];
+    for (const paramsId of ids) {
+      const redeemedIds = await checkRedeemed(id, org_id, paramsId);
+      if (redeemedIds) {
+        redeemed.push(true);
+        break;
       }
-
-      if (checkReward.redeemed) {
-        return res.status(400).json({
-          message: `Reward with ID ${paramsId} has already been redeemed`,
-          statusCode: 400,
-          data: null,
-        });
-      }
-
-      // Redeem the reward for the current ID
-      await Reward.update(
-        { redeemed: true },
-        {
-          where: {
-            receiver_id: id,
-            org_id: org_id,
-            id: paramsId,
-          },
-        }
-      );
-
-      // Update the lunch credit balance for the current ID
-      const newPrice = lunch_credit_balance + checkReward.quantity;
-      await User.update(
-        { lunch_credit_balance: newPrice },
-        { where: { id: id } }
-      );
+    }
+    if (redeemed.includes(true)) {
+      return res.status(400).json({
+        message: "Reward already redeemed",
+        statusCode: 400,
+        data: null,
+      });
+    }
+    let quantityArray = [];
+    for (const paramsId of ids) {
+      const hello = await updateReward(id, org_id, paramsId);
+      quantityArray.push(hello);
     }
 
-    // Respond with a success message once all IDs are processed
+    const quantity = quantityArray.reduce((prev, current) => prev + current);
+    const newPrice = lunch_credit_balance + quantity;
+    await User.update(
+      { lunch_credit_balance: newPrice },
+      { where: { id: id } }
+    );
     return res.status(200).json({
       message: "Lunch rewards redeemed successfully",
       statusCode: 200,
@@ -152,6 +121,52 @@ return;
   }
 };
 
+async function checkValid(id, org_id, paramsId) {
+  const checkReward = await Reward.findOne({
+    where: {
+      receiver_id: id,
+      org_id,
+      id: paramsId,
+    },
+  });
+  if (!checkReward) {
+    return false;
+  }
+  return true;
+}
+async function checkRedeemed(id, org_id, paramsId) {
+  const checkReward = await Reward.findOne({
+    where: {
+      receiver_id: id,
+      org_id,
+      id: paramsId,
+    },
+  });
+  if (checkReward.redeemed === true) {
+    return true;
+  }
+  return false;
+}
+async function updateReward(id, org_id, paramsId) {
+  const reward = await Reward.findOne({
+    where: {
+      receiver_id: id,
+      org_id,
+      id: paramsId,
+    },
+  });
+  await Reward.update(
+    { redeemed: true },
+    {
+      where: {
+        receiver_id: id,
+        org_id,
+        id: paramsId,
+      },
+    }
+  );
+  return reward.quantity;
+}
 
 module.exports = {
   userSignup,

@@ -85,7 +85,7 @@ const updateLunchPrice = async (req, res) => {
     const { lunch_price } = req.body;
     if (typeof lunch_price === string) {
       return res.status(400).json({
-        message: "Invalid Price",
+        message: "Invalid Amount",
         statusCode: 400,
         data: null,
       });
@@ -133,15 +133,15 @@ const updateWalletBalance = async (req, res) => {
         data: null,
       });
     }
-    const checkOrg = await Organization_lunch_wallet.findOne({ where: { id: org_id } });
+    const checkOrg = await Organization_lunch_wallet.findOne({ where: { org_id } });
     if (!checkOrg) {
-      return res.status(200).json({
+      return res.status(400).json({
         message: "No Organization found",
         statusCode: 400,
         data: null,
       });
     }
-    await Organization_lunch_wallet.update({ balance: amount }, { where: { id: org_id } });
+    await Organization_lunch_wallet.update({ balance: amount }, { where: {  org_id } });
     return res.status(200).json({
       message: "success",
       statusCode: 200,
