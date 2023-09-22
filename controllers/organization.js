@@ -31,6 +31,46 @@ const createOrUpdateOrg = async (req, res) => {
     }
 };
 
+const staffSignup = async (req, res, next)=>{
+    try {
+          const  {email, password, otpToken, firstName, lastName, phoneNumber} = req.body
+
+          if (!phoneNumber){
+            return res.status(400).json({message: "missing phone number"})
+          }
+
+          // logic to convert otp to orgId goes here
+          const decodedToken = await jwt.verify(otpToken, process.env.JWT_SECRET)
+          let orgId =  decodedToken.orgId
+         
+          // Call the signupUser service function
+          const user  = await signupUser({
+          email,
+          password,
+          orgId,
+          firstName,
+          lastName,
+          phoneNumber
+      });
+    
+          const formattedUser = {
+          id: user.id,
+          email: user.email,
+          password_hash: user.password_hash,
+          org_id: user.org_id,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          created_at: user.created_at,
+          updated_at: user.updated_at,
+      };
+      
+    res.status(201).json({ success: true, user: formattedUser});
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
     createOrUpdateOrg,
+    staffSignup
 }
