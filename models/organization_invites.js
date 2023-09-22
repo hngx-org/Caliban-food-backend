@@ -1,10 +1,9 @@
-// const Sequelize = require("sequelize");
-
-'use strict';
-const { Model } = require('sequelize');
-
+"use strict";
+const { Model } = require("sequelize");
+const { JWT_EXPIRE, JWT_SECRET } = require("../config/config");
+const jwt = require("jsonwebtoken");
 module.exports = (sequelize, DataTypes) => {
-  class Lunches extends Model {
+  class Organization_invites extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -12,28 +11,27 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // Define associations to the User model for sender and receiver
-      Lunches.belongsTo(models.User, { foreignKey: 'sender_id', as: 'sender' });
-      Lunches.belongsTo(models.User, {
-        foreignKey: 'receiver_id',
-        as: 'receiver',
-      });
-      Lunches.belongsTo(models.Organization, {
-        foreignKey: 'org_id',
-        as: 'organization',
+      Organization_invites.belongsTo(models.Organization, {
+        foreignKey: "org_id",
+        as: "organization",
       });
     }
   }
-  Lunches.init(
+  Organization_invites.init(
     {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      quantity: DataTypes.INTEGER,
-      redeemed: DataTypes.BOOLEAN,
-      note: DataTypes.TEXT,
+      email: DataTypes.STRING(255),
+      token: DataTypes.STRING(255),
+      ttl: DataTypes.DATE,
+      is_deleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -47,10 +45,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Lunches',
-      tableName: 'lunches',
+      modelName: "Organization_invites",
+      tableName: "organization_invites",
       timestamps: false,
     }
   );
-  return Lunches;
+  return Organization_invites;
 };

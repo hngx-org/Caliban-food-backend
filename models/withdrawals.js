@@ -1,24 +1,51 @@
-const Sequelize = require('sequelize');
-
-const sequelize = require('../configs/dbConfig');
-
-const Withdrawals = sequelize.define('withdrawals', {
-    id: {
-        type: Sequelize.STRING,
-        primaryKey: true,
-        allowNull: false
-     },
-    user_id: {
-        type: Sequelize.TEXT,
-        allowNull: false
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Withdrawals extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      Withdrawals.belongsTo(models.User, { foreignKey: "user_id", as: "user" });
+    }
+  }
+  Withdrawals.init(
+    {
+      // id: {
+      //   type: DataTypes.INTEGER,
+      //   primaryKey: true,
+      //   autoIncrement: true,
+      // },
+      user_id: DataTypes.INTEGER,
+      status: DataTypes.ENUM("pending", "approved", "rejected"),
+      amount: DataTypes.DECIMAL(10, 2),
+      created_at: DataTypes.DATE,
+      // is_deleted: {
+      //   type: DataTypes.BOOLEAN,
+      //   allowNull: false,
+      //   defaultValue: false,
+      // },
+      // created_at: {
+      //   type: DataTypes.DATE,
+      //   allowNull: false,
+      //   defaultValue: DataTypes.NOW,
+      // },
+      // updated_at: {
+      //   type: DataTypes.DATE,
+      //   allowNull: false,
+      //   defaultValue: DataTypes.NOW,
+      // },
     },
-    status:{
-        type: Sequelize.TEXT
-    },
-    amount:{
-        type: Sequelize.BIGINT,
-        allowNull: false
-    },
-})
-
-module.exports = Withdrawals;
+    {
+      sequelize,
+      modelName: "Withdrawals",
+      tableName: "withdrawals",
+    }
+  );
+  return Withdrawals;
+};
