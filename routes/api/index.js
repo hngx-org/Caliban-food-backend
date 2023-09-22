@@ -7,6 +7,7 @@ const getAllUsers = require("./getAllUsers");
 const searchUser = require("./searchUsers");
 const withdraw = require("./withdraw");
 const test = require("./test");
+const organization = require("./organization");
 
 router.use("/", UserRoutes);
 router.use("/lunch", rewardRoutes);
@@ -15,5 +16,6 @@ router.use("/user", userInfo);
 router.use("/", searchUser);
 router.use("/", withdraw);
 router.use("/", test);
+router.use("/organization", organization);
 
 module.exports = router;
