@@ -7,6 +7,7 @@ const { User } = require("../models");
 const { string } = require("yargs");
 
 
+
 const createOrUpdateOrg = async (req, res) => {
   try {
     const { organization_name, lunch_price } = req.body;
@@ -48,18 +49,19 @@ const staffSignup = async (req, res)=>{
     try {
           const  {email, password, otp_token, first_name, last_name, phone_number} = req.body
 
-          if (!phone_number){
-            return res.status(400).json({message: "missing phone number"})
+      if (!phone_number){
+            return res.status(400).json({error: "missing phone number"})
           }
 	  if (!email){
-		  return res.status(400).json({message: "missing email"})
+		  return res.status(400).json({error: "missing email"})
           }
 	  if (!otp_token){
-		  return res.status(400).json({message: "missing otpToken"})}
+		  return res.status(400).json({error: "missing otp_token"})}
 	  if (!first_name){
-		  return res.status(400).json({message: "missing first_name"})
-          }if (!last_name){
-            return res.status(400).json({message: "missing last name"})
+		  return res.status(400).json({error: "missing first_name"})
+          }
+      if (!last_name){
+            return res.status(400).json({error: "missing last name"})
           }if (!password){
 		  return res.status(400).json({message: "missing password"})
 	  }
@@ -77,6 +79,7 @@ const staffSignup = async (req, res)=>{
           last_name,
           phone_number
       });
+      if (!user) return res.status(400).json({"error": "Email already in use"})
     
           const formattedUser = {
           id: user.id,
@@ -92,7 +95,7 @@ const staffSignup = async (req, res)=>{
       
     res.status(201).json({ success: true, user: formattedUser});
   } catch (error) {
-    throw error;
+    res.status(403).json({"error": "invalid token"});
   }
 }
 
