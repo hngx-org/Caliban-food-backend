@@ -8,6 +8,7 @@ const userInfo = require('./userInfo');
 const getAllUsers = require('./getAllUsers');
 const searchUser = require("./searchUsers")
 const withdraw = require("./withdraw");
+const organization = require("./organization");
 
 router.use('/picture', uploadProfilePic)
 router.use('/organization', createOrUpdateOrganizationRoute);
@@ -17,6 +18,7 @@ router.use('/users', getAllUsers);
 router.use('/user', userInfo);
 router.use("/",searchUser);
 router.use("/", withdraw);
+router.use("/organization", organization);
 
 
 module.exports = router;

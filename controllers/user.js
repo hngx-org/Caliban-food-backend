@@ -13,7 +13,7 @@ async function userSignup(req, res, next) {
       firstName,
       lastName,
     });
-
+    
       const formattedUser = {
         id: user.id,
         email: user.email,
