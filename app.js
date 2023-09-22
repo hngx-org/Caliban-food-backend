@@ -103,5 +103,9 @@ app.use('/api', routes);
 dbConnection();
 >>>>>>> a980ef5b14d29c46486a36c41a694afe47ea0766
 
+<<<<<<< HEAD
 // Export the Express application instance
 module.exports = app;
+=======
+module.exports = app;
+>>>>>>> 5f42e90a05ec59184b98a49ff6644ab117861901
