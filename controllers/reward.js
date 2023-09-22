@@ -55,7 +55,7 @@ const addReward = async (req, res) => {
 
 /**
  *  @description  Get all rewards
- *  @route        GET /api/lunch/:params/:id
+ *  @route        GET /api/lunch/all
  *  @access       Public
  *
  */
@@ -146,5 +146,5 @@ const getOneReward = async (req, res) => {
 module.exports = {
   addReward,
   getAllReward,
-  getOneReward
+  getOneReward,
 };
