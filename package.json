@@ -26,6 +26,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
+    "cloudinary": "^1.40.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -36,6 +37,9 @@
     "joi": "^17.10.2",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "multer-storage": "^0.4.1",
+    "multer-storage-cloudinary": "^4.0.0",
     "mysql2": "^3.6.1",
     "nodemailer": "^6.9.5",
     "nodemon": "^3.0.1",
