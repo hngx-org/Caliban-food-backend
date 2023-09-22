@@ -18,7 +18,7 @@ async function decodeToken(token) {
 
   return decode;
 }
-async function sendMail(email) {
+async function sendMail(email, token) {
   let mailTransporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -32,7 +32,8 @@ async function sendMail(email) {
     to: email,
     subject: "Organization Invite",
     text: "Official Invitation to join the organization",
-    html: "<p>Official Invitation to join the organization</p>",
+    html: `<p>Official Invitation to join the organization</p>
+    <a href="https://meet.google.com/dae-hhbs-urx?token=${token}">Organization Link</a>`,
   };
 
   mailTransporter.sendMail(maiDetails, function (err, data) {
