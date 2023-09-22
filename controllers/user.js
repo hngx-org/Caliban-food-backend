@@ -3,29 +3,27 @@ const { signupUser, loginUser } = require('../services/user');
 // Controller function for user signup
 async function userSignup(req, res, next) {
   try {
-    const { email, password, orgId, firstName, lastName } = req.body;
+    const { email, password, phone, firstName, lastName } = req.body;
 
     // Call the signupUser service function
-    const { user, token } = await signupUser({
+    await signupUser({
       email,
       password,
-      orgId,
+      phone,
       firstName,
       lastName,
     });
-    
-      const formattedUser = {
-        id: user.id,
-        email: user.email,
-        password_hash: user.password_hash,
-        org_id: user.org_id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        created_at: user.created_at,
-        updated_at: user.updated_at,
-      };
-      
-    res.status(201).json({ success: true, user: formattedUser, token });
+
+    // const formattedUser = {
+    //   email: user.email,
+    //   phone: user.phone,
+    //   first_name: user.first_name,
+    //   last_name: user.last_name,
+    //   created_at: user.created_at,
+    //   updated_at: user.updated_at,
+    // };
+
+    res.status(201).json({ success: 'User created Successfully' });
   } catch (error) {
     next(error);
   }
