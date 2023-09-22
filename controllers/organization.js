@@ -1,4 +1,6 @@
 const orgService = require('../services/organization');
+const signupStaff = require("../services/staff").signupStaff
+const jwt = require("jsonwebtoken")
 
 const createOrUpdateOrg = async (req, res) => {
     try {
@@ -32,26 +34,39 @@ const createOrUpdateOrg = async (req, res) => {
 };
 
 
+
 const staffSignup = async (req, res)=>{
     try {
-          const  {email, password, otpToken, firstName, lastName, phoneNumber} = req.body
+          const  {email, password, otp_token, first_name, last_name, phone_number} = req.body
 
-          if (!phoneNumber){
+          if (!phone_number){
             return res.status(400).json({message: "missing phone number"})
           }
+	  if (!email){
+		  return res.status(400).json({message: "missing email"})
+          }
+	  if (!otp_token){
+		  return res.status(400).json({message: "missing otpToken"})}
+	  if (!first_name){
+		  return res.status(400).json({message: "missing first_name"})
+          }if (!last_name){
+            return res.status(400).json({message: "missing last name"})
+          }if (!password){
+		  return res.status(400).json({message: "missing password"})
+	  }
 
-          // logic to convert otp to orgId goes here
-          const decodedToken = await jwt.verify(otpToken, process.env.JWT_SECRET)
-          let orgId =  decodedToken.orgId
+          // get organization id from token
+          const decoded = jwt.verify(otp_token, process.env.JWT_SECRET)
+	      const orgId = decoded.org_id
          
-          // Call the signupUser service function
-          const user  = await signupUser({
+          // Call the signupStaff service function
+          const user  = await signupStaff({
           email,
           password,
           orgId,
-          firstName,
-          lastName,
-          phoneNumber
+          first_name,
+          last_name,
+          phone_number
       });
     
           const formattedUser = {
@@ -61,6 +76,7 @@ const staffSignup = async (req, res)=>{
           org_id: user.org_id,
           first_name: user.first_name,
           last_name: user.last_name,
+	  phone_number: user.phone_number,
           created_at: user.created_at,
           updated_at: user.updated_at,
       };
