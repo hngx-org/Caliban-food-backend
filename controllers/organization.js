@@ -31,7 +31,8 @@ const createOrUpdateOrg = async (req, res) => {
     }
 };
 
-const staffSignup = async (req, res, next)=>{
+
+const staffSignup = async (req, res)=>{
     try {
           const  {email, password, otpToken, firstName, lastName, phoneNumber} = req.body
 
