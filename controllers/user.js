@@ -1,9 +1,27 @@
 const { signupUser, loginUser } = require('../services/user');
+const validator = require('validator');
 
 // Controller function for user signup
 async function userSignup(req, res, next) {
   try {
     const { email, password, orgId, firstName, lastName } = req.body;
+
+    // Validate user signup credentials
+    if(!validator.isEmail(email)) {
+      return res.status(400).json({error: 'Invalid email address'});
+    } else if(!validator.isStrongPassword(password, {minLength: 6})) {
+      return res.status(400).json({error: 'Weak password, a minimum of 6 characters is required'});
+    } else if(!validator.isInt(orgId)) {
+      return res.status(400).json({error: 'Organization Id should be a number'});
+    } else if(validator.isEmpty(firstName)) {
+      return res.status(400).json({ error:'First name is required' });
+    } else if(!validator.isAlpha(firstName, 'en-GB', {ignore: ' '})) {
+      return res.status(400).json({ error:'first name can only contain letters' });
+    } else if(validator.isEmpty(lastName)) {
+      return res.status(400).json({ error:'Last name is required' });
+    } else if(!validator.isAlpha(lastName, 'en-GB', {ignore: ' '})) {
+      return res.status(400).json({ error:'Last name can only contain letters'});
+    }
 
     // Call the signupUser service function
     const { user, token } = await signupUser({
@@ -36,6 +54,13 @@ async function userLogin(req, res, next) {
   try {
     const { email, password } = req.body;
 
+    // Validate user login credentials
+    if(!validator.isEmail(email)) {
+      return res.status(400).json({error: 'Invalid email address'});
+    } else if(!validator.isStrongPassword(password, {minLength: 6})) {
+      return res.status(400).json({error: 'Weak password, a minimum of 6 characters is required'});
+    }
+    
     // Call the loginUser service function
     const { user, token } = await loginUser({ email, password });
 
