@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const UserRoutes = require('./user');
+
+const uploadProfilePic = require("./uploadProfilePic.js")
+const createOrUpdateOrganizationRoute = require('./organization')
+const UserRoutes = require('./user')
+
 const rewardRoutes = require('../api/reward');
 const userInfo = require('./userInfo');
 const getAllUsers = require('./getAllUsers');
@@ -9,6 +13,9 @@ const withdraw = require('./withdraw');
 const test = require('./test');
 const organization = require('./organization');
 
+
+router.use('/picture', uploadProfilePic)
+router.use('/organization', createOrUpdateOrganizationRoute);
 router.use('/auth', UserRoutes);
 router.use('/lunch', rewardRoutes);
 router.use('/users', getAllUsers);
@@ -17,5 +24,6 @@ router.use('/', searchUser);
 router.use('/', withdraw);
 router.use('/', test);
 router.use('/organization', organization);
+
 
 module.exports = router;

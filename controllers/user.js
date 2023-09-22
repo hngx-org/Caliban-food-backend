@@ -36,7 +36,9 @@ async function userSignup(req, res, next) {
 // Controller function for user login
 async function userLogin(req, res, next) {
   try {
+    console.log("in function")
     const { email, password } = req.body;
+    console.log(`${email}-${password}`)
 
     // Call the loginUser service function
     const { user, token } = await loginUser({ email, password });
