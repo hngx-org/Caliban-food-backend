@@ -41,8 +41,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'OrganizationLaunchWallet',
-      tableName: 'organization_lunch_wallet',
+      modelName: 'Organization_lunch_wallet',
+      tableName: 'organization_lunch_wallets',
       timestamps: false,
     }
   );
