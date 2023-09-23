@@ -1,48 +1,30 @@
-const { Organization } = require('../models');
+const { Organization_invites } = require("../models");
+const { sendMail, generateEncryptedOTP} = require("../utils/helpers");
 
-// Create a new organization
-const createOrganization = async (organizationData) => {
+const { User } = require("../models");
+
+const createOrganizationInvite = async (email, orgId) => { 
+  const getOTP = await generateEncryptedOTP()
+  const isAdmin = await User.findByPk(orgId);
+  if (!isAdmin.is_admin) {
+    throw new Error("Unauthorized user");
+  }
   try {
-    const { organization_name, lunch_price } = organizationData;
-
-    // Default lunch_price to 1000 if not provided
-    const newOrganization = await Organization.create({
-      name: organization_name,
-      lunch_price: lunch_price || 1000,
+    await sendMail(email, getOTP);
+    const newOrganizationInvite = await Organization_invites.create({
+      email: email,
+      token: getOTP,
+      is_deleted: false,
+      org_id: isAdmin.org_id,
+      ttl: new Date(),
     });
 
-    return newOrganization;
+    return newOrganizationInvite;
   } catch (error) {
-    throw new Error('Error creating organization');
-  }
-};
-
-// Update an existing organization
-const updateOrganization = async (orgId, updatedData) => {
-  try {
-    const updatedOrganization = await Organization.findByPk(orgId);
-
-    if (!updatedOrganization) {
-      throw new Error('Organization not found');
-    }
-
-    // Update the organization properties as needed
-    if (updatedData.organization_name) {
-      updatedOrganization.name = updatedData.organization_name;
-    }
-    if (updatedData.lunch_price) {
-      updatedOrganization.lunch_price = updatedData.lunch_price;
-    }
-
-    await updatedOrganization.save();
-
-    return updatedOrganization;
-  } catch (error) {
-    throw new Error('Error updating organization');
+    throw new Error("Error creating organization invite");
   }
 };
 
 module.exports = {
-  createOrganization,
-  updateOrganization, // Export the new service function for updating organizations
+  createOrganizationInvite,
 };

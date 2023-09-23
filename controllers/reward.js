@@ -18,6 +18,7 @@ const addReward = async (req, res) => {
   try {
     const { receiverId, quantity, note } = req.body;
     const { id } = req.user;
+    const { org_id } = await User.findOne({ where: { id: id } });
     if (typeof quantity == "string") {
       return res.status(400).json({
         message: "Invalid Quantity",
@@ -31,11 +32,27 @@ const addReward = async (req, res) => {
       });
     }
 
+    const userReceiver = await User.findOne({ where: { id: receiverId } });
+    if (!userReceiver){
+      return res.status(400).json({
+        message: "Can't Send lunch to this user",
+        statusCode: 400,
+      });
+    }
+
+    if (id === receiverId){
+      return res.status(400).json({
+        message: "Can't Send lunch to self",
+        statusCode: 400,
+      });
+    }
+
     const createReward = {
       sender_id: id,
       receiver_id: receiverId,
       quantity,
       note,
+      org_id
     };
     await Reward.create(createReward);
     res.status(201).json({
@@ -55,7 +72,7 @@ const addReward = async (req, res) => {
 
 /**
  *  @description  Get all rewards
- *  @route        GET /api/lunch/:params/:id
+ *  @route        GET /api/lunch/all
  *  @access       Public
  *
  */
