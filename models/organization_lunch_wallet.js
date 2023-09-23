@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Organization_lunch_wallet extends Model {
     /**
@@ -11,9 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-       Organization_lunch_wallet.belongsTo(models.Organization, {
-         foreignKey: "org_id",
-       });
+      Organization_lunch_wallet.belongsTo(models.Organization, {
+        foreignKey: 'org_id',
+      });
     }
   }
   Organization_lunch_wallet.init(
@@ -31,24 +29,20 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: false,
       },
       created_at: {
-        allowNull: false,
         type: DataTypes.DATE,
-        defaultValue: sequelize.literal(
-          "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
-        ),
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
       },
       updated_at: {
-        allowNull: false,
         type: DataTypes.DATE,
-        defaultValue: sequelize.literal(
-          "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
-        ),
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
       },
     },
     {
       sequelize,
-      modelName: "OrganizationLaunchWallet",
-      tableName: "organization_launch_wallet",
+      modelName: 'OrganizationLaunchWallet',
+      tableName: 'organization_lunch_wallet',
       timestamps: false,
     }
   );
