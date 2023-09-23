@@ -54,29 +54,3 @@ module.exports = (sequelize, DataTypes) => {
   );
   return Lunches;
 };
-
-// const Lunches = sequelize.define("lunch ", {
-//   id: {
-//     type: Sequelize.STRING,
-//     primaryKey: true,
-//     allowNull: false,
-//   },
-//   senderId: {
-//     type: Sequelize.TEXT,
-//     allowNull: false,
-//   },
-//   receiverId: {
-//     type: Sequelize.TEXT,
-//     allowNull: false,
-//   },
-//   quantity: {
-//     type: Sequelize.INTEGER,
-//     allowNull: false,
-//   },
-//   redeemed: {
-//     type: Sequelize.BOOLEAN,
-//   },
-//   note: {
-//     type: Sequelize.TEXT,
-//   },
-// });

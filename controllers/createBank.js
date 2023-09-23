@@ -3,6 +3,13 @@ const { User } = require('../models');
 const createBank = async (req, res) => {
   const { bank_name, bank_code, bank_number } = req.body;
 
+  if (!bank_name || !bank_code || !bank_number) {
+    return res.json({
+      message: 'All fields are required',
+      statusCode: 400,
+    });
+  }
+
   const { id } = req.user;
 
   try {
