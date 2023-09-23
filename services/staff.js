@@ -6,7 +6,7 @@ async function signupStaff({ email, password, orgId, firstName, lastName, phoneN
     // Check if the user with the same email already exists
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      throw new Error("Email is already in use");
+      return false
     }
 
     // Hash the password before storing it in the database
@@ -20,7 +20,7 @@ async function signupStaff({ email, password, orgId, firstName, lastName, phoneN
       org_id: orgId,
       first_name: firstName,
       last_name: lastName,
-      phone_number: phoneNumber
+      phonenumber: phoneNumber
     });
 
     return newUser;

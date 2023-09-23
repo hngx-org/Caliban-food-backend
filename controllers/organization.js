@@ -79,7 +79,7 @@ const staffSignup = async (req, res)=>{
 	  }
 
         // get organization id from token
-        const decoded = jwt.verify(otp_token, process.env.JWT_SECRET)
+        const decoded = jwt.verify(otp_token, process.env.ENCODING_STRING)
 	      const orgId = decoded.org_id
          
           // Call the signupStaff service function
@@ -92,11 +92,11 @@ const staffSignup = async (req, res)=>{
           phone_number
       });
       if (!user) return res.status(400).json({"error": "Email already in use"})
-    
+
+      console.log(user)
           const formattedUser = {
           id: user.id,
           email: user.email,
-          password_hash: user.password_hash,
           org_id: user.org_id,
           first_name: user.first_name,
           last_name: user.last_name,

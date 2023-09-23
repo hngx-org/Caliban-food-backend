@@ -116,7 +116,7 @@ const createOrganizationInvite = async (email, orgUserId) => {
       email: email,
       token: token,
       is_deleted: false,
-      org_id: isAdmin.org_id,
+      //org_id: isAdmin.org_id,
       ttl: new Date(),
     });
 

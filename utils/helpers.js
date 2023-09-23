@@ -18,8 +18,10 @@ async function decodeToken(token) {
 
   return decode;
 }
+
+
 async function sendMail(email, token) {
-  let mailTransporter = nodemailer.createTransport({
+  let mailTransporter =  nodemailer.createTransport({
     service: "gmail",
     auth: {
       user: process.env.EMAIL_USER,
@@ -27,6 +29,7 @@ async function sendMail(email, token) {
     },
   });
 
+  
   let maiDetails = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -38,7 +41,7 @@ async function sendMail(email, token) {
 
   mailTransporter.sendMail(maiDetails, function (err, data) {
     if (err) {
-      console.log("Error Occurs");
+      console.log("Error occured");
     } else {
       console.log("Email sent successfully", data);
     }
