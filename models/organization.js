@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Organization extends Model {
     /**
@@ -10,23 +8,23 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Organization.hasMany(models.User, { foreignKey: "org_id", as: "users" });
+      Organization.hasMany(models.User, { foreignKey: 'org_id', as: 'users' });
 
       //change here
       Organization.hasMany(models.Organization_invites, {
-        foreignKey: "org_id",
-        as: "invites",
+        foreignKey: 'org_id',
+        as: 'invites',
       });
 
       Organization.hasOne(models.OrganizationLaunchWallet, {
-        foreignKey: "org_id",
-        as: "launchWallet",
+        foreignKey: 'org_id',
+        as: 'launchWallet',
       });
 
       // Association with the Lunches model (lunches)
       Organization.hasMany(models.Lunches, {
-        foreignKey: "org_id",
-        as: "lunches",
+        foreignKey: 'org_id',
+        as: 'lunches',
       });
     }
   }
@@ -57,12 +55,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,
-      }
+      },
     },
     {
       sequelize,
-      modelName: "Organization",
-      tableName: "organization",
+      modelName: 'Organization',
+      tableName: 'organization',
       timestamps: false,
     }
   );

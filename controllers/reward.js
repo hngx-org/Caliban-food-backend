@@ -18,6 +18,7 @@ const addReward = async (req, res) => {
   try {
     const { receiverId, quantity, note } = req.body;
     const { id } = req.user;
+    const { org_id } = await User.findOne({ where: { id: id } });
     if (typeof quantity == "string") {
       return res.status(400).json({
         message: "Invalid Quantity",
@@ -36,6 +37,7 @@ const addReward = async (req, res) => {
       receiver_id: receiverId,
       quantity,
       note,
+      org_id
     };
     await Reward.create(createReward);
     res.status(201).json({
