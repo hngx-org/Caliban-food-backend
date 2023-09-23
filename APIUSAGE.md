@@ -40,7 +40,6 @@ Before you begin, ensure you have met the following requirements:
   - NODE_ENV="development"
 
 
-
 ### Running the API
 
 Start the API locally using the following commands:
