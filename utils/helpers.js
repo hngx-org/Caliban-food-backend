@@ -57,27 +57,13 @@ async function sendMail(email, token) {
 
 
 
-async function generateEncryptedOTP(orgId, userEmail) {
-  let fixedIVHex = process.env.ENCODING_STRING
-  const fixedIV = Buffer.from(fixedIVHex, 'hex');
-  const combinedValue = `${orgId}:${userEmail}`;
-  const cipher = crypto.createCipheriv('aes-256-cbc', secretKey, fixedIV);
-  let encrypted = cipher.update(combinedValue, 'utf-8', 'hex');
-  encrypted += cipher.final('hex');
-  // Convert the crypto hash to a string and Truncate the string to 6 characters
- encrypted = encrypted.toString().substring(0, 6);
-  return encrypted;
-}
-
-async function decryptEncryptedOTP(encryptedOTP) {
-  let fixedIVHex = process.env.ENCODING_STRING
-  const fixedIV = Buffer.from(fixedIVHex, 'hex');
-  const decipher = crypto.createDecipheriv('aes-256-cbc', secretKey, fixedIV);
-  let decrypted = decipher.update(encryptedOTP, 'hex', 'utf-8');
-  decrypted += decipher.final('utf-8');
-  return decrypted.split(':')[0]; // Extract OTP from combined value
+async function generateEncryptedOTP() {
+  let bytes = crypto.randomBytes(32)
+  let text = bytes.toString("hex")
+  return (text.substring(0, 6));
 }
 
 
+generateEncryptedOTP()
 
-module.exports = { generateToken, decodeToken, sendMail, decryptEncryptedOTP, generateEncryptedOTP};
+module.exports = { generateToken, decodeToken, sendMail,  generateEncryptedOTP};

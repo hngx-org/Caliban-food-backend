@@ -4,7 +4,7 @@ const { sendMail, generateEncryptedOTP} = require("../utils/helpers");
 const { User } = require("../models");
 
 const createOrganizationInvite = async (email, orgId) => { 
-  const getOTP = await generateEncryptedOTP(email, orgId)
+  const getOTP = await generateEncryptedOTP()
   const isAdmin = await User.findByPk(orgId);
   if (!isAdmin.is_admin) {
     throw new Error("Unauthorized user");

@@ -20,7 +20,7 @@ async function signupStaff({ email, password, orgId, firstName, lastName, phoneN
       org_id: orgId,
       first_name: firstName,
       last_name: lastName,
-      phonenumber: phoneNumber
+      phone: phoneNumber
     });
 
     return newUser;
