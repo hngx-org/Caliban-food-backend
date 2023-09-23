@@ -32,6 +32,14 @@ const addReward = async (req, res) => {
       });
     }
 
+    const userReceiver = await User.findOne({ where: { id: receiverId } });
+    if (!userReceiver){
+      return res.status(400).json({
+        message: "Can't Send lunch to this user",
+        statusCode: 400,
+      });
+    }
+
     if (id === receiverId){
       return res.status(400).json({
         message: "Can't Send lunch to self",
