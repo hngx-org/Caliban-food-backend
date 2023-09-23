@@ -1,7 +1,12 @@
 const dotenv = require("dotenv");
 const nodemailer = require("nodemailer");
 dotenv.config();
+const crypto = require('crypto');
+const secretKeyHex = process.env.SECRET_CRYPTO_KEY
+const secretKey = Buffer.from(secretKeyHex, 'hex');
 const jwt = require("jsonwebtoken");
+
+
 async function generateToken(payload) {
   const token = jwt.sign(
     {
@@ -48,4 +53,27 @@ async function sendMail(email, token) {
   });
 }
 
-module.exports = { generateToken, decodeToken, sendMail };
+
+
+function generateEncryptedOTP(orgId, userEmail) {
+  let fixedIVHex = process.env.ENCODING_STRING
+  const fixedIV = Buffer.from(fixedIVHex, 'hex');
+  const combinedValue = `${otp}:${userEmail}`;
+  const cipher = crypto.createCipheriv('aes-256-cbc', secretKey, fixedIV);
+  let encrypted = cipher.update(combinedValue, 'utf-8', 'hex');
+  encrypted += cipher.final('hex');
+  return encrypted;
+}
+
+function decryptEncryptedOTP(encryptedOTP) {
+  let fixedIVHex = process.env.ENCODING_STRING
+  const fixedIV = Buffer.from(fixedIVHex, 'hex');
+  const decipher = crypto.createDecipheriv('aes-256-cbc', secretKey, fixedIV);
+  let decrypted = decipher.update(encryptedOTP, 'hex', 'utf-8');
+  decrypted += decipher.final('utf-8');
+  return decrypted.split(':')[0]; // Extract OTP from combined value
+}
+
+
+
+module.exports = { generateToken, decodeToken, sendMail, decryptEncryptedOTP, generateEncryptedOTP};

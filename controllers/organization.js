@@ -4,6 +4,7 @@ const { validationResult } = require("express-validator");
 const orgService = require("../services/organization");
 const { Organization, Organization_lunch_wallet } = require("../models");
 const { User } = require("../models");
+const decryptEncryptedOTP = require("../utils/helpers").decryptEncryptedOTP
 const { string } = require("yargs");
 
 
@@ -79,8 +80,7 @@ const staffSignup = async (req, res)=>{
 	  }
 
         // get organization id from token
-        const decoded = jwt.verify(otp_token, process.env.ENCODING_STRING)
-	      const orgId = decoded.org_id
+        const orgId = decryptEncryptedOTP(otp_token)
          
           // Call the signupStaff service function
           const user  = await signupStaff({
