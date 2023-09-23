@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Withdrawals extends Model {
     /**
@@ -16,20 +14,15 @@ module.exports = (sequelize, DataTypes) => {
   }
   Withdrawals.init(
     {
-<<<<<<< HEAD
-=======
       // id: {
       //   type: DataTypes.INTEGER,
       //   primaryKey: true,
       //   autoIncrement: true,
       // },
->>>>>>> 5f42e90a05ec59184b98a49ff6644ab117861901
       user_id: DataTypes.INTEGER,
       status: DataTypes.ENUM("pending", "approved", "rejected"),
       amount: DataTypes.DECIMAL(10, 2),
       created_at: DataTypes.DATE,
-<<<<<<< HEAD
-=======
       // is_deleted: {
       //   type: DataTypes.BOOLEAN,
       //   allowNull: false,
@@ -45,7 +38,6 @@ module.exports = (sequelize, DataTypes) => {
       //   allowNull: false,
       //   defaultValue: DataTypes.NOW,
       // },
->>>>>>> 5f42e90a05ec59184b98a49ff6644ab117861901
     },
     {
       sequelize,
