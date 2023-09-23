@@ -1,12 +1,19 @@
 const bcrypt = require("bcryptjs");
 const { User } = require("../models");
 
-async function signupStaff({ email, password, orgId, firstName, lastName, phoneNumber }) {
+async function signupStaff(
+  email,
+  password,
+  orgId,
+  firstName,
+  lastName,
+  phoneNumber
+) {
   try {
     // Check if the user with the same email already exists
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      return false
+      return false;
     }
 
     // Hash the password before storing it in the database
@@ -20,7 +27,7 @@ async function signupStaff({ email, password, orgId, firstName, lastName, phoneN
       org_id: orgId,
       first_name: firstName,
       last_name: lastName,
-      phonenumber: phoneNumber
+      phone: phoneNumber,
     });
 
     return newUser;
@@ -29,7 +36,6 @@ async function signupStaff({ email, password, orgId, firstName, lastName, phoneN
   }
 }
 
-
 module.exports = {
-  signupStaff
+  signupStaff,
 };

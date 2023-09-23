@@ -2,8 +2,8 @@ const dotenv = require("dotenv");
 const nodemailer = require("nodemailer");
 dotenv.config();
 const crypto = require('crypto');
-const secretKeyHex = process.env.SECRET_CRYPTO_KEY
-const secretKey = Buffer.from(secretKeyHex, 'hex');
+// const secretKeyHex = process.env.SECRET_CRYPTO_KEY
+// const secretKey = Buffer.from(secretKeyHex, 'hex');
 const jwt = require("jsonwebtoken");
 
 
@@ -41,39 +41,29 @@ async function sendMail(email, token) {
     subject: "Organization Invite",
     text: "Official Invitation to join the organization",
     html: `<p>Official Invitation to join the organization</p>
-    <a href="https://meet.google.com/dae-hhbs-urx?token=${token}">Organization Link</a>`,
+    <a href="${process.env.BASE_URL}/organization/staff/signup">Sign Up Here.</a><br>
+    <p>with this Token : ${token}</p>`,
   };
 
   mailTransporter.sendMail(maiDetails, function (err, data) {
     if (err) {
       console.log("Error occured");
     } else {
-      console.log("Email sent successfully", data);
+      console.log("Email sent successfully");
     }
   });
 }
 
 
 
-function generateEncryptedOTP(orgId, userEmail) {
-  let fixedIVHex = process.env.ENCODING_STRING
-  const fixedIV = Buffer.from(fixedIVHex, 'hex');
-  const combinedValue = `${otp}:${userEmail}`;
-  const cipher = crypto.createCipheriv('aes-256-cbc', secretKey, fixedIV);
-  let encrypted = cipher.update(combinedValue, 'utf-8', 'hex');
-  encrypted += cipher.final('hex');
-  return encrypted;
-}
 
-function decryptEncryptedOTP(encryptedOTP) {
-  let fixedIVHex = process.env.ENCODING_STRING
-  const fixedIV = Buffer.from(fixedIVHex, 'hex');
-  const decipher = crypto.createDecipheriv('aes-256-cbc', secretKey, fixedIV);
-  let decrypted = decipher.update(encryptedOTP, 'hex', 'utf-8');
-  decrypted += decipher.final('utf-8');
-  return decrypted.split(':')[0]; // Extract OTP from combined value
+async function generateEncryptedOTP() {
+  let bytes = crypto.randomBytes(32)
+  let text = bytes.toString("hex")
+  return (text.substring(0, 6));
 }
 
 
+generateEncryptedOTP()
 
-module.exports = { generateToken, decodeToken, sendMail, decryptEncryptedOTP, generateEncryptedOTP};
+module.exports = { generateToken, decodeToken, sendMail,  generateEncryptedOTP};

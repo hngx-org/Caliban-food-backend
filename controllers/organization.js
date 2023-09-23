@@ -2,9 +2,13 @@ const signupStaff = require("../services/staff").signupStaff;
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const orgService = require("../services/organization");
-const { Organization, Organization_lunch_wallet } = require("../models");
-const { User } = require("../models");
-const decryptEncryptedOTP = require("../utils/helpers").decryptEncryptedOTP;
+const {
+  User,
+  Organization,
+  Organization_lunch_wallet,
+  Organization_invites,
+} = require("../models");
+
 const { string } = require("yargs");
 
 const createOrganization = async (req, res) => {
@@ -67,10 +71,8 @@ const createOrganization = async (req, res) => {
 
 const staffSignup = async (req, res) => {
   try {
-    const { email, password, otp_token, first_name, last_name, phone_number } =
-      req.body;
-
-    if (!phone_number) {
+    const { email, password, otp_token, first_name, last_name, phone_number } = req.body;
+    if (!phone_number || typeof phone_number === "string") {
       return res.status(400).json({ error: "missing phone number" });
     }
     if (!email) {
@@ -89,18 +91,32 @@ const staffSignup = async (req, res) => {
       return res.status(400).json({ message: "missing password" });
     }
 
-    // get organization id from token
-    const orgId = decryptEncryptedOTP(otp_token);
+    const invite = await Organization_invites.findOne({
+      where: { token: otp_token, email: email },
+    });
 
-    // Call the signupStaff service function
-    const user = await signupStaff({
+    if (!invite) {
+      return res.status(401).json({
+        message: "Unauthorised",
+        statusCode: 401,
+        data: null,
+      });
+    } else if (invite.is_deleted) {
+      return res.status(400).json({
+        message: "Expired token",
+        statusCode: 400,
+        data: null,
+      });
+    }
+    const orgId = invite.org_id;
+    const user = await signupStaff(
       email,
       password,
       orgId,
       first_name,
       last_name,
-      phone_number,
-    });
+      phone_number
+    );
     if (!user) return res.status(400).json({ error: "Email already in use" });
 
     const formattedUser = {
@@ -113,10 +129,17 @@ const staffSignup = async (req, res) => {
       created_at: user.created_at,
       updated_at: user.updated_at,
     };
-
-    res.status(201).json({ success: true, user: formattedUser });
+    await Organization_invites.update(
+      { is_deleted: true },
+      { where: { token: otp_token, email: email } }
+    );
+    return res.status(201).json({ success: true, user: formattedUser });
   } catch (error) {
-    res.status(403).json({ error: "invalid token" });
+    return res.status(500).json({
+      message: `Staff signUp Failed: ${error?.message}`,
+      statusCode: 500,
+      data: null,
+    });
   }
 };
 
