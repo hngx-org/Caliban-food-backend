@@ -32,6 +32,13 @@ const addReward = async (req, res) => {
       });
     }
 
+    if (id === receiverId){
+      return res.status(400).json({
+        message: "Can't Send lunch to self",
+        statusCode: 400,
+      });
+    }
+
     const createReward = {
       sender_id: id,
       receiver_id: receiverId,

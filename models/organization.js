@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'invites',
       });
 
-      Organization.hasOne(models.OrganizationLaunchWallet, {
+      Organization.hasOne(models.Organization_lunch_wallet, {
         foreignKey: 'org_id',
         as: 'launchWallet',
       });
