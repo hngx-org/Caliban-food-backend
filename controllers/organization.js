@@ -7,23 +7,80 @@ const { User } = require("../models");
 const decryptEncryptedOTP = require("../utils/helpers").decryptEncryptedOTP;
 const { string } = require("yargs");
 
-const createOrUpdateOrg = async (req, res) => {
-  const { id } = req.user;
+// const createOrUpdateOrg = async (req, res) => {
+//   const { id } = req.user;
+//   try {
+//     const { organization_name, lunch_price } = req.body;
+
+//     const organization = await orgService.createOrganization(
+//       organization_name,
+//       lunch_price,
+//       id
+//     );
+
+//     return res.status(201).json({
+//       message: "Organization created or updated successfully",
+//       organization,
+//     });
+//   } catch (err) {
+//     return res.status(500).json({ message: err?.message });
+//   }
+// };
+const createOrganization = async (req, res) => {
   try {
-    const { organization_name, lunch_price } = req.body;
-
-    const organization = await orgService.createOrganization(
-      organization_name,
-      lunch_price,
-      id
-    );
-
-    return res.status(201).json({
-      message: "Organization created or updated successfully",
-      organization,
+    const { id } = req.user;
+    const { is_admin } = await User.findOne({ where: { id: id } });
+    if (!is_admin) {
+      return res.status(400).json({
+        message: "Unauthorised",
+        statusCode: 400,
+        data: null,
+      });
+    }
+    const { organization_name, lunch_price = 1000 } = req.body;
+    if (!organization_name) {
+      return res.status(400).json({
+        message: "No Organization name found",
+        statusCode: 400,
+        data: null,
+      });
+    }
+    const orgExist = await Organization.findOne({
+      where: {
+        name: organization_name,
+      },
     });
-  } catch (err) {
-    return res.status(500).json({ message: "Internal server error" });
+    if (orgExist) {
+      return res.status(400).json({
+        message: "Organiztion Name Already Exist",
+        statusCode: 400,
+        data: null,
+      });
+    }
+    const newOrganization = await Organization.create({
+      name: organization_name,
+      lunch_price: lunch_price,
+      currency_code: "₦",
+    });
+
+    await User.update({ org_id: newOrganization.id }, { where: { id: id } });
+
+    //  create organization wallet
+    await Organization_lunch_wallet.create({
+      org_id: newOrganization.id,
+      balance: lunch_price,
+    });
+    return res.status(200).json({
+      message: `Organization Creation Successful`,
+      statusCode: 200,
+      data: newOrganization,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: `Organization Creation Failed: ${error?.message}`,
+      statusCode: 500,
+      data: null,
+    });
   }
 };
 
@@ -157,7 +214,7 @@ const updateWalletBalance = async (req, res) => {
     }
 
     const { amount } = req.body;
-    if (!amount){
+    if (!amount) {
       return res.status(400).json({
         message: "No amount given",
         statusCode: 400,
@@ -200,9 +257,9 @@ const updateWalletBalance = async (req, res) => {
 };
 
 module.exports = {
-  createOrUpdateOrg,
   sendOrganizationInvite,
   staffSignup,
   updateLunchPrice,
   updateWalletBalance,
+  createOrganization,
 };
