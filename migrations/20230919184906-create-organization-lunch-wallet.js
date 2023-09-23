@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("organization_lunch_wallet", {
+    await queryInterface.createTable('organization_lunch_wallet', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -17,27 +17,27 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
-          model: "Organization", // Assuming your organization table is named "Organizations"
-          key: "id",
+          model: 'Organization', // Assuming your organization table is named "Organizations"
+          key: 'id',
         },
-        onUpdate: "CASCADE",
-        onDelete: "SET NULL",
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal(
-          "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+          'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'
         ),
       },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('organization_lunch_wallets');
-  }
+    await queryInterface.dropTable('organization_lunch_wallet');
+  },
 };
