@@ -2,8 +2,8 @@ const dotenv = require("dotenv");
 const nodemailer = require("nodemailer");
 dotenv.config();
 const crypto = require('crypto');
-const secretKeyHex = process.env.SECRET_CRYPTO_KEY
-const secretKey = Buffer.from(secretKeyHex, 'hex');
+// const secretKeyHex = process.env.SECRET_CRYPTO_KEY
+// const secretKey = Buffer.from(secretKeyHex, 'hex');
 const jwt = require("jsonwebtoken");
 
 
