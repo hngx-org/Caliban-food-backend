@@ -7,25 +7,6 @@ const { User } = require("../models");
 const decryptEncryptedOTP = require("../utils/helpers").decryptEncryptedOTP;
 const { string } = require("yargs");
 
-// const createOrUpdateOrg = async (req, res) => {
-//   const { id } = req.user;
-//   try {
-//     const { organization_name, lunch_price } = req.body;
-
-//     const organization = await orgService.createOrganization(
-//       organization_name,
-//       lunch_price,
-//       id
-//     );
-
-//     return res.status(201).json({
-//       message: "Organization created or updated successfully",
-//       organization,
-//     });
-//   } catch (err) {
-//     return res.status(500).json({ message: err?.message });
-//   }
-// };
 const createOrganization = async (req, res) => {
   try {
     const { id } = req.user;
