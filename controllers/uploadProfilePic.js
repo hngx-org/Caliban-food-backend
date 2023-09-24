@@ -4,8 +4,7 @@ const uploadPicture = async (req, res)=>{
   const { id } = req.user;
   try {
     const user = await User.findByPk(id);
-    console.log(req.file)
-    user.profile_picture = req.file.path
+    user.profile_pic = req.file.path
     await user.save();
     return res.json({
       message: 'successfully uploaded profile picture',
