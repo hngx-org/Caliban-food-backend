@@ -19,8 +19,8 @@ cloudinary.config({
 
 const upload = multer({ storage: storage });
 
-router.post("/upload",authMiddleware,
-[upload.single("image")],
+router.post("/upload",[authMiddleware,
+upload.single("image")],
  uploadProfilePicture);
 
 module.exports = router
