@@ -64,6 +64,6 @@ async function generateEncryptedOTP() {
 }
 
 
-generateEncryptedOTP()
+//generateEncryptedOTP()
 
 module.exports = { generateToken, decodeToken, sendMail,  generateEncryptedOTP};
