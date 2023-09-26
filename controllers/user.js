@@ -1,8 +1,13 @@
 const { Lunches } = require("../models");
 const { User } = require("../models");
-
+const queue = require('../utils/queue')
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = require('../config/config');
 const Reward = Lunches;
 const { signupUser, loginUser } = require("../services/user");
+setInterval(queue.dequeue, 10 * 60 * 60 * 1000); //placed it otside a func since set timeout needs to be ran only once
+  
+ 
 
 // Controller function for user signup
 async function userSignup(req, res, next) {
@@ -42,7 +47,7 @@ async function userLogin(req, res, next) {
 
     // Call the loginUser service function
     const { user, token } = await loginUser({ email, password });
-
+    
     // Return a success response with user data and JWT token
     res.status(200).json({ success: true, token });
   } catch (error) {
@@ -170,8 +175,27 @@ async function updateReward(id, org_id, paramsId) {
   return reward.quantity;
 }
 
+// logs out user
+async function userLogout(req, res){
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token == null) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    if (!queue.include(token)) queue.enqueue(token)
+   res.status(200).json({message: "user logged out successfully"})
+  });
+}
+
 module.exports = {
   userSignup,
+  userLogout,
   userLogin,
   redeemLunch,
 };
